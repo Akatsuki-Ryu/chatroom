@@ -29,8 +29,10 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 io.on('connection', function (socket) {
   console.log('a user connected');
+  // io.emit('chat message', "a user is now online");
   socket.on('disconnect', function () {
     console.log('user disconnected');
+    // io.emit('chat message', "user is gone offline");
   });
 });
 
@@ -38,6 +40,7 @@ io.on('connection', function (socket) {
 io.on('connection', function(socket){
   socket.on('chat message', function(msg){
     console.log('message: ' + msg);
+    io.emit('chat message', msg);
   });
 });
 
