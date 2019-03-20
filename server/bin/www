@@ -8,6 +8,7 @@ var app = require('../app');
 var debug = require('debug')('server:server');
 var http = require('http');
 
+
 /**
  * Get port from environment and store in Express.
  */
@@ -20,6 +21,15 @@ app.set('port', port);
  */
 
 var server = http.createServer(app);
+
+//socket.io
+//this is a code that solves "GET /socket.io/socket.io.js 404" error
+var io = require('socket.io').listen(server);
+io.on('connection', function(socket){
+  console.log('a user connected');
+});
+
+
 
 /**
  * Listen on provided port, on all network interfaces.
@@ -88,3 +98,4 @@ function onListening() {
     : 'port ' + addr.port;
   debug('Listening on ' + bind);
 }
+

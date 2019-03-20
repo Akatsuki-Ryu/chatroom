@@ -1,10 +1,11 @@
 var express = require('express');
 var router = express.Router();
 
-// const io = require("socket.io")(server);
-let rooms = [];
-let messages = [];
-let idCounter = 0;
+
+var http = require('http');
+var app = require('express');
+var server = http.createServer(app);
+var io = require('socket.io').listen(server);
 
 
 /* GET home page. */
@@ -14,12 +15,25 @@ let idCounter = 0;
 // });
 
 
-router.get('/', function(req, res){
-  res.sendFile(__dirname + '/index.html');
+router.get('/', function (req, res) {
+    res.sendFile(__dirname + '/index.html');
 });
 
 
+io.on('connection', function (socket) {
+    console.log('a user connected');
+    socket.on('disconnect', function () {
+        console.log('user disconnected');
+    });
+});
+
+// http.listen(3111, function(){
+//   console.log('listening on *:3111');
+// });
+
 
 module.exports = router;
+
+
 
 
