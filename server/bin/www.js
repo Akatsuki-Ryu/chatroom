@@ -22,12 +22,25 @@ app.set('port', port);
 
 var server = http.createServer(app);
 
+
+
 //socket.io
 //this is a code that solves "GET /socket.io/socket.io.js 404" error
 var io = require('socket.io').listen(server);
-io.on('connection', function(socket){
+io.on('connection', function (socket) {
   console.log('a user connected');
+  socket.on('disconnect', function () {
+    console.log('user disconnected');
+  });
 });
+
+//show the message sent in the client
+io.on('connection', function(socket){
+  socket.on('chat message', function(msg){
+    console.log('message: ' + msg);
+  });
+});
+
 
 
 
