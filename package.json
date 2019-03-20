@@ -1,0 +1,19 @@
+{
+  "name": "chatroom",
+  "version": "1.0.0",
+  "description": "this is a chatting room application powered by akabox",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Akatsuki-Ryu/chatroom.git"
+  },
+  "author": "Akatsuki-Ryu",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Akatsuki-Ryu/chatroom/issues"
+  },
+  "homepage": "https://github.com/Akatsuki-Ryu/chatroom#readme"
+}
