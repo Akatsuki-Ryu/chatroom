@@ -29,10 +29,10 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server);
 io.on('connection', function (socket) {
   console.log('a user connected');
-  // io.emit('chat message', "a user is now online");
+  io.emit('chat message', "a user is now online, welcome");
   socket.on('disconnect', function () {
     console.log('user disconnected');
-    // io.emit('chat message', "user is gone offline");
+    io.emit('chat message', "user is gone offline");
   });
 });
 
