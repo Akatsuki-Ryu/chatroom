@@ -85,7 +85,7 @@ io.on('connection', (socket) => {
             username: socket.username,
             message: data
         });
-        console.log(getDateTime() + "message: " + socket.username + " ======> " + data);
+        console.log(getDateTime() + " message: " + socket.username + " ======> " + data);
 
     });
 
