@@ -4,7 +4,8 @@ var router = express.Router();
 
 var http = require('http');
 var app = require('express');
-var server = http.createServer(app);
+// var server = http.createServer(app);
+var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
 
@@ -16,12 +17,12 @@ var io = require('socket.io').listen(server);
 
 
 router.get('/', function (req, res) {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '../public/');
 });
 
 
 io.on('connection', function (socket) {
-    console.log('a user connected');
+    console.log('a user connected from indexjs');
     socket.on('disconnect', function () {
         console.log('user disconnected');
     });
