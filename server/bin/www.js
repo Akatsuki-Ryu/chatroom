@@ -28,11 +28,11 @@ var server = http.createServer(app);
 //this is a code that solves "GET /socket.io/socket.io.js 404" error
 var io = require('socket.io').listen(server);
 io.on('connection', function (socket) {
-  console.log('a user connected');
+  // console.log('a user connected');  //this is for the indexold
   io.emit('chat message', "a user is now online, welcome");
   socket.on('disconnect', function () {
-    console.log('user disconnected');
-    io.emit('chat message', "user is gone offline");
+    // console.log('user disconnected');  //this is for the indexold
+    // io.emit('chat message', "user is gone offline");  //this is for the indexold
   });
 });
 
@@ -59,6 +59,7 @@ io.on('connection', (socket) => {
       username: socket.username,
       message: data
     });
+    console.log("message: " + socket.username + "  says  " + data);
   });
 
   // when the client emits 'add user', this listens and executes
@@ -72,11 +73,13 @@ io.on('connection', (socket) => {
     socket.emit('login', {
       numUsers: numUsers
     });
+    console.log("there are " + numUsers +" users now");
     // echo globally (all clients) that a person has connected
     socket.broadcast.emit('user joined', {
       username: socket.username,
       numUsers: numUsers
     });
+    console.log("user: " + socket.username + " joined ");
   });
 
   // when the client emits 'typing', we broadcast it to others
@@ -103,6 +106,7 @@ io.on('connection', (socket) => {
         username: socket.username,
         numUsers: numUsers
       });
+      console.log("user: " + socket.username + " left ");
     }
   });
 });
