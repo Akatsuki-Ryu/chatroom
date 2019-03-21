@@ -39,7 +39,7 @@ io.on('connection', function (socket) {
 //show the message sent in the client
 io.on('connection', function(socket){
   socket.on('new message', function(msg){
-    console.log('message: ' + msg);
+    // console.log('message: ' + msg);  //this is for the indexold
     // io.emit('new message', msg); //this is for the indexold
   });
 });
@@ -59,7 +59,7 @@ io.on('connection', (socket) => {
       username: socket.username,
       message: data
     });
-    console.log("message: " + socket.username + "  says  " + data);
+    console.log("message: " + socket.username + " ======> " + data);
   });
 
   // when the client emits 'add user', this listens and executes
