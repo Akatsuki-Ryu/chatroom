@@ -229,7 +229,7 @@ $(function() {
     socket.on('login', (data) => {
         connected = true;
         // Display the welcome message
-        var message = "Welcome to Socket.IO Chat – ";
+        var message = "Welcome to Chat – Powered by Akabox";
         log(message, {
             prepend: true
         });
