@@ -8,6 +8,32 @@ var app = require('../app');
 var debug = require('debug')('server:server');
 var http = require('http');
 
+// date and time information
+function getDateTime() {
+
+  var date = new Date();
+
+  var hour = date.getHours();
+  hour = (hour < 10 ? "0" : "") + hour;
+
+  var min  = date.getMinutes();
+  min = (min < 10 ? "0" : "") + min;
+
+  var sec  = date.getSeconds();
+  sec = (sec < 10 ? "0" : "") + sec;
+
+  var year = date.getFullYear();
+
+  var month = date.getMonth() + 1;
+  month = (month < 10 ? "0" : "") + month;
+
+  var day  = date.getDate();
+  day = (day < 10 ? "0" : "") + day;
+
+  return year + "." + month + "." + day + "-" + hour + ":" + min + ":" + sec;
+
+}
+
 
 /**
  * Get port from environment and store in Express.
@@ -47,6 +73,8 @@ io.on('connection', function(socket){
 
 // Chatroom
 
+
+
 var numUsers = 0;
 
 io.on('connection', (socket) => {
@@ -59,7 +87,9 @@ io.on('connection', (socket) => {
       username: socket.username,
       message: data
     });
-    console.log("message: " + socket.username + " ======> " + data);
+    console.log(getDateTime() + "message: " + socket.username + " ======> " + data);
+
+
   });
 
   // when the client emits 'add user', this listens and executes
