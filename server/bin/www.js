@@ -11,26 +11,26 @@ var http = require('http');
 // date and time information
 function getDateTime() {
 
-  var date = new Date();
+    var date = new Date();
 
-  var hour = date.getHours();
-  hour = (hour < 10 ? "0" : "") + hour;
+    var hour = date.getHours();
+    hour = (hour < 10 ? "0" : "") + hour;
 
-  var min  = date.getMinutes();
-  min = (min < 10 ? "0" : "") + min;
+    var min = date.getMinutes();
+    min = (min < 10 ? "0" : "") + min;
 
-  var sec  = date.getSeconds();
-  sec = (sec < 10 ? "0" : "") + sec;
+    var sec = date.getSeconds();
+    sec = (sec < 10 ? "0" : "") + sec;
 
-  var year = date.getFullYear();
+    var year = date.getFullYear();
 
-  var month = date.getMonth() + 1;
-  month = (month < 10 ? "0" : "") + month;
+    var month = date.getMonth() + 1;
+    month = (month < 10 ? "0" : "") + month;
 
-  var day  = date.getDate();
-  day = (day < 10 ? "0" : "") + day;
+    var day = date.getDate();
+    day = (day < 10 ? "0" : "") + day;
 
-  return year + "." + month + "." + day + "-" + hour + ":" + min + ":" + sec;
+    return year + "." + month + "." + day + "-" + hour + ":" + min + ":" + sec;
 
 }
 
@@ -49,99 +49,94 @@ app.set('port', port);
 var server = http.createServer(app);
 
 
-
 //socket.io
 //this is a code that solves "GET /socket.io/socket.io.js 404" error
 var io = require('socket.io').listen(server);
 io.on('connection', function (socket) {
-  // console.log('a user connected');  //this is for the indexold
-  io.emit('chat message', "a user is now online, welcome");
-  socket.on('disconnect', function () {
-    // console.log('user disconnected');  //this is for the indexold
-    // io.emit('chat message', "user is gone offline");  //this is for the indexold
-  });
+    // console.log('a user connected');  //this is for the indexold
+    io.emit('chat message', "a user is now online, welcome");
+    socket.on('disconnect', function () {
+        // console.log('user disconnected');  //this is for the indexold
+        // io.emit('chat message', "user is gone offline");  //this is for the indexold
+    });
 });
 
 //show the message sent in the client
-io.on('connection', function(socket){
-  socket.on('new message', function(msg){
-    // console.log('message: ' + msg);  //this is for the indexold
-    // io.emit('new message', msg); //this is for the indexold
-  });
+io.on('connection', function (socket) {
+    socket.on('new message', function (msg) {
+        // console.log('message: ' + msg);  //this is for the indexold
+        // io.emit('new message', msg); //this is for the indexold
+    });
 });
 
 
 // Chatroom
 
 
-
 var numUsers = 0;
 
 io.on('connection', (socket) => {
-  var addedUser = false;
+    var addedUser = false;
 
-  // when the client emits 'new message', this listens and executes
-  socket.on('new message', (data) => {
-    // we tell the client to execute 'new message'
-    socket.broadcast.emit('new message', {
-      username: socket.username,
-      message: data
+    // when the client emits 'new message', this listens and executes
+    socket.on('new message', (data) => {
+        // we tell the client to execute 'new message'
+        socket.broadcast.emit('new message', {
+            username: socket.username,
+            message: data
+        });
+        console.log(getDateTime() + "message: " + socket.username + " ======> " + data);
+
     });
-    console.log(getDateTime() + "message: " + socket.username + " ======> " + data);
 
+    // when the client emits 'add user', this listens and executes
+    socket.on('add user', (username) => {
+        if (addedUser) return;
 
-  });
-
-  // when the client emits 'add user', this listens and executes
-  socket.on('add user', (username) => {
-    if (addedUser) return;
-
-    // we store the username in the socket session for this client
-    socket.username = username;
-    ++numUsers;
-    addedUser = true;
-    socket.emit('login', {
-      numUsers: numUsers
+        // we store the username in the socket session for this client
+        socket.username = username;
+        ++numUsers;
+        addedUser = true;
+        socket.emit('login', {
+            numUsers: numUsers
+        });
+        console.log("there are " + numUsers + " users now");
+        // echo globally (all clients) that a person has connected
+        socket.broadcast.emit('user joined', {
+            username: socket.username,
+            numUsers: numUsers
+        });
+        console.log("user: " + socket.username + " joined ");
     });
-    console.log("there are " + numUsers +" users now");
-    // echo globally (all clients) that a person has connected
-    socket.broadcast.emit('user joined', {
-      username: socket.username,
-      numUsers: numUsers
+
+    // when the client emits 'typing', we broadcast it to others
+    socket.on('typing', () => {
+        socket.broadcast.emit('typing', {
+            username: socket.username
+        });
     });
-    console.log("user: " + socket.username + " joined ");
-  });
 
-  // when the client emits 'typing', we broadcast it to others
-  socket.on('typing', () => {
-    socket.broadcast.emit('typing', {
-      username: socket.username
+    // when the client emits 'stop typing', we broadcast it to others
+    socket.on('stop typing', () => {
+        socket.broadcast.emit('stop typing', {
+            username: socket.username
+        });
     });
-  });
 
-  // when the client emits 'stop typing', we broadcast it to others
-  socket.on('stop typing', () => {
-    socket.broadcast.emit('stop typing', {
-      username: socket.username
+    // when the user disconnects.. perform this
+    socket.on('disconnect', () => {
+        if (addedUser) {
+            --numUsers;
+
+            // echo globally that this client has left
+            socket.broadcast.emit('user left', {
+                username: socket.username,
+                numUsers: numUsers
+            });
+            console.log("user: " + socket.username + " left ");
+        }
     });
-  });
-
-  // when the user disconnects.. perform this
-  socket.on('disconnect', () => {
-    if (addedUser) {
-      --numUsers;
-
-      // echo globally that this client has left
-      socket.broadcast.emit('user left', {
-        username: socket.username,
-        numUsers: numUsers
-      });
-      console.log("user: " + socket.username + " left ");
-    }
-  });
 });
-
-
 
 
 /**
@@ -157,19 +152,19 @@ server.on('listening', onListening);
  */
 
 function normalizePort(val) {
-  var port = parseInt(val, 10);
+    var port = parseInt(val, 10);
 
-  if (isNaN(port)) {
-    // named pipe
-    return val;
-  }
+    if (isNaN(port)) {
+        // named pipe
+        return val;
+    }
 
-  if (port >= 0) {
-    // port number
-    return port;
-  }
+    if (port >= 0) {
+        // port number
+        return port;
+    }
 
-  return false;
+    return false;
 }
 
 /**
@@ -177,27 +172,27 @@ function normalizePort(val) {
  */
 
 function onError(error) {
-  if (error.syscall !== 'listen') {
-    throw error;
-  }
+    if (error.syscall !== 'listen') {
+        throw error;
+    }
 
-  var bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+    var bind = typeof port === 'string'
+        ? 'Pipe ' + port
+        : 'Port ' + port;
 
-  // handle specific listen errors with friendly messages
-  switch (error.code) {
-    case 'EACCES':
-      console.error(bind + ' requires elevated privileges');
-      process.exit(1);
-      break;
-    case 'EADDRINUSE':
-      console.error(bind + ' is already in use');
-      process.exit(1);
-      break;
-    default:
-      throw error;
-  }
+    // handle specific listen errors with friendly messages
+    switch (error.code) {
+        case 'EACCES':
+            console.error(bind + ' requires elevated privileges');
+            process.exit(1);
+            break;
+        case 'EADDRINUSE':
+            console.error(bind + ' is already in use');
+            process.exit(1);
+            break;
+        default:
+            throw error;
+    }
 }
 
 /**
@@ -205,10 +200,10 @@ function onError(error) {
  */
 
 function onListening() {
-  var addr = server.address();
-  var bind = typeof addr === 'string'
-    ? 'pipe ' + addr
-    : 'port ' + addr.port;
-  debug('Listening on ' + bind);
+    var addr = server.address();
+    var bind = typeof addr === 'string'
+        ? 'pipe ' + addr
+        : 'port ' + addr.port;
+    debug('Listening on ' + bind);
 }
 
