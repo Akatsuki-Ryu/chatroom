@@ -12,7 +12,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "node-env-run 2server --exec nodemon | pino-colada",
+    "server": "node-env-run ../server/bin/www.js --exec nodemon | pino-colada",
      "dev": "run-p server start"
   },
    "proxy": "http://localhost:3111",
