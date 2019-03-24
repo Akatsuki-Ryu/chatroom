@@ -1,10 +1,10 @@
 import React from "react";
 
-const RoomList = ({ header, data, onItemClick }) => (
+const RoomList = ({header, data, onItemClick}) => (
     <ul>
-        { data && data.map(item => (
-            <li key={ item.id } onClick={ () => onItemClick(item.id) }>{ item.name }</li>
-        )) }
+        {data && data.map(item => (
+            <li key={item.id} onClick={() => onItemClick(item.id)}>{item.name}</li>
+        ))}
     </ul>
 )
 

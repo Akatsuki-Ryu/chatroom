@@ -160,9 +160,9 @@ function pushMessage(message) {
 function onServerListening() {
     console.log("onServerListening");
     // Create a few rooms
-    rooms.push({ id: "room" + idCounter++, name: "Room 1" });
-    rooms.push({ id: "room" + idCounter++, name: "Room 2" });
-    rooms.push({ id: "room" + idCounter++, name: "Room 3" });
+    rooms.push({id: "room" + idCounter++, name: "Room 1"});
+    rooms.push({id: "room" + idCounter++, name: "Room 2"});
+    rooms.push({id: "room" + idCounter++, name: "Room 3"});
     // Wait for sockets to connect
     io.on("connection", onSocketConnect);
 }
@@ -177,7 +177,6 @@ function onSocketConnect(socket) {
     // Listen for new messages being sent by client
     socket.on(constants.MESSAGE_SEND, pushMessage);
 }
-
 
 
 /**
@@ -251,9 +250,9 @@ function onListening() {
     //logic for messageing new
     console.log("onServerListening");
     // Create a few rooms
-    rooms.push({ id: "room" + idCounter++, name: "Room 1" });
-    rooms.push({ id: "room" + idCounter++, name: "Room 2" });
-    rooms.push({ id: "room" + idCounter++, name: "Room 3" });
+    rooms.push({id: "room" + idCounter++, name: "Room 1"});
+    rooms.push({id: "room" + idCounter++, name: "Room 2"});
+    rooms.push({id: "room" + idCounter++, name: "Room 3"});
     // Wait for sockets to connect
     io.on("connection", onSocketConnect);
 

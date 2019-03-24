@@ -1,4 +1,4 @@
-$(function() {
+$(function () {
     var FADE_TIME = 250; // ms
     var TYPING_TIMER_LENGTH = 1000; // ms
     var COLORS = [

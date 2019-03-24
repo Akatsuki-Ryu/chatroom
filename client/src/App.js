@@ -1,121 +1,116 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import logo from './logo.svg';
 import './App.css';
-
 //redux
-import { connect } from "react-redux";
-
-
+import {connect} from "react-redux";
 //socketio
 import io from "socket.io-client";
-
 //inputform
 import InputForm from "./components/InputForm";
 import MessageListContainer from "./components/MessageListContainer";
 import RoomListContainer from "./components/RoomListContainer";
-
-
 //logic
 import * as actions from "./actions";
 import * as constants from "./constants";
 import * as strings from "./strings";
 
 
-
 class App extends Component {
 
 
-  componentDidMount() {
-    // Connect socket
-    let socket = io("http://localhost:3000");
-    socket.on(constants.SOCKET_CONNECT, () => this.props.onSocketConnect(socket));
-    socket.on(constants.ROOM_RECEIVE, this.props.onRoomReceive);
-    socket.on(constants.MESSAGE_RECEIVE, this.props.onMessageReceive);
-  }
+    constructor(props) {
+        super(props);
+        this.state = {
+            name: '',
+            greeting: ''
+        };
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
 
-  onMessageSend = messageText => {
-    // Send new message to the server
-    this.props.socket.emit(constants.MESSAGE_SEND, { text: messageText, username: this.props.username, roomId: this.props.roomId });
-  }
+    componentDidMount() {
+        // Connect socket
+        let socket = io("http://localhost:3000");
+        socket.on(constants.SOCKET_CONNECT, () => this.props.onSocketConnect(socket));
+        socket.on(constants.ROOM_RECEIVE, this.props.onRoomReceive);
+        socket.on(constants.MESSAGE_RECEIVE, this.props.onMessageReceive);
+    }
 
+    onMessageSend = messageText => {
+        // Send new message to the server
+        this.props.socket.emit(constants.MESSAGE_SEND, {
+            text: messageText,
+            username: this.props.username,
+            roomId: this.props.roomId
+        });
+    }
 
-  render() {
-    return (
-
-
-
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <form onSubmit={this.handleSubmit}>
-            <label htmlFor="name">Enter your name: </label>
-            <input
-                id="name"
-                type="text"
-                value={this.state.name}
-                onChange={this.handleChange}
-            />
-            <button type="submit">Submit</button>
-          </form>
-          <p>{this.state.greeting}</p>
-
-        <div>
-          { !this.props.username &&	<InputForm label={ strings.USERNAME_LABEL } submitLabel={ strings.SUBMIT } onSubmit={ this.props.onUsernameSubmit } /> }
-          { this.props.username &&	<RoomListContainer /> }
-          { this.props.username &&	<MessageListContainer onMessageSend={ this.onMessageSend }/> }
-        </div>
-        </header>
-      </div>
-    );
-  }
+    render() {
+        return (
 
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      name: '',
-      greeting: ''
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-  }
+            <div className="App">
+                <header className="App-header">
+                    <img src={logo} className="App-logo" alt="logo"/>
+                    <form onSubmit={this.handleSubmit}>
+                        <label htmlFor="name">Enter your name: </label>
+                        <input
+                            id="name"
+                            type="text"
+                            value={this.state.name}
+                            onChange={this.handleChange}
+                        />
+                        <button type="submit">Submit</button>
+                    </form>
+                    <p>{this.state.greeting}</p>
 
-  handleChange(event) {
-    this.setState({ name: event.target.value });
-  }
+                    <div>
+                        {!this.props.username && <InputForm label={strings.USERNAME_LABEL} submitLabel={strings.SUBMIT}
+                                                            onSubmit={this.props.onUsernameSubmit}/>}
+                        {this.props.username && <RoomListContainer/>}
+                        {this.props.username && <MessageListContainer onMessageSend={this.onMessageSend}/>}
+                    </div>
+                </header>
+            </div>
+        );
+    }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    fetch(`/api/greeting?name=${encodeURIComponent(this.state.name)}`)
-        .then(response => response.json())
-        .then(state => this.setState(state));
-  }
+    handleChange(event) {
+        this.setState({name: event.target.value});
+    }
+
+    handleSubmit(event) {
+        event.preventDefault();
+        fetch(`/api/greeting?name=${encodeURIComponent(this.state.name)}`)
+            .then(response => response.json())
+            .then(state => this.setState(state));
+    }
 
 }
 
 const mapStateToProps = state => {
-  return {
-    socket: state.socket,
-    username: state.username,
-    roomId: state.roomId
-  }
+    return {
+        socket: state.socket,
+        username: state.username,
+        roomId: state.roomId
+    }
 }
 
 const mapDispatchToProps = dispatch => {
-  return {
-    onUsernameSubmit: username => {
-      dispatch(actions.setUsername(username));
-    },
-    onSocketConnect: socket => {
-      dispatch(actions.connectSocket(socket));
-    },
-    onRoomReceive: room => {
-      dispatch(actions.receiveRoom(room));
-    },
-    onMessageReceive: message => {
-      dispatch(actions.receiveMessage(message));
+    return {
+        onUsernameSubmit: username => {
+            dispatch(actions.setUsername(username));
+        },
+        onSocketConnect: socket => {
+            dispatch(actions.connectSocket(socket));
+        },
+        onRoomReceive: room => {
+            dispatch(actions.receiveRoom(room));
+        },
+        onMessageReceive: message => {
+            dispatch(actions.receiveMessage(message));
+        }
     }
-  }
 }
 
 

@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, {Component} from "react";
+import {connect} from "react-redux";
 import InputForm from "./InputForm";
 import MessageList from "./MessageList";
 
@@ -7,8 +7,8 @@ class MessageListContainer extends Component {
     render() {
         return (
             <div>
-                <MessageList header={ this.props.roomName } data={ this.props.messages } />
-                <InputForm onSubmit={ this.props.onMessageSend } />
+                <MessageList header={this.props.roomName} data={this.props.messages}/>
+                <InputForm onSubmit={this.props.onMessageSend}/>
             </div>
         )
     }

@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, {Component} from "react";
+import {connect} from "react-redux";
 import RoomList from "./RoomList";
 import * as actions from "../actions";
 import * as history from "../history";
@@ -15,18 +15,19 @@ class RoomListContainer extends Component {
     navigate = path => {
         // Set new room only if path is valid
         let pathIndex = this.props.rooms ? this.props.rooms.map(room => room.id).indexOf(path) : -1;
-        if(pathIndex > -1 && path !== this.props.roomId) {
+        if (pathIndex > -1 && path !== this.props.roomId) {
             this.props.onRoomSet(path);
         }
     }
 
     render() {
         // Set browser path at render stage to ensure the roomId state has been validated
-        if(this.props.roomId !== history.getPath()) {
+        if (this.props.roomId !== history.getPath()) {
             history.push(this.props.roomId);
         }
         return (
-            <RoomList header={ strings.ROOMS_HEADER } data={ this.props.rooms } onItemClick={ roomId => this.props.onRoomSet(roomId) }/>
+            <RoomList header={strings.ROOMS_HEADER} data={this.props.rooms}
+                      onItemClick={roomId => this.props.onRoomSet(roomId)}/>
         );
     }
 }

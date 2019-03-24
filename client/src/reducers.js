@@ -29,7 +29,7 @@ export function rootReducer(state = initialState, action) {
         case constants.ROOM_RECEIVE:
             // Do not add same room another time
             // If this is the first room received, also set the room id
-            if(state.rooms.map(room => room.id).indexOf(action.room.id) > -1) return state;
+            if (state.rooms.map(room => room.id).indexOf(action.room.id) > -1) return state;
             return {
                 ...state,
                 rooms: [...state.rooms, action.room],

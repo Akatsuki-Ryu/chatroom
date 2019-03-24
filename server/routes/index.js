@@ -24,8 +24,8 @@ router.get('/', function (req, res) {
 router.get('/api/greeting', (req, res) => {
     const name = req.query.name || 'World';
     res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({ greeting: `Hello ${name}!` }));
-    console.log("the name is " +name);
+    res.send(JSON.stringify({greeting: `Hello ${name}!`}));
+    console.log("the name is " + name);
 });
 
 
