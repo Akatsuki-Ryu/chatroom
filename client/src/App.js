@@ -10,9 +10,9 @@ import { connect } from "react-redux";
 import io from "socket.io-client";
 
 //inputform
-// import InputForm from "./components/InputForm";
-// import MessageListContainer from "./components/MessageListContainer";
-// import RoomListContainer from "./components/RoomListContainer";
+import InputForm from "./components/InputForm";
+import MessageListContainer from "./components/MessageListContainer";
+import RoomListContainer from "./components/RoomListContainer";
 
 
 //logic
@@ -25,13 +25,13 @@ import * as strings from "./strings";
 class App extends Component {
 
 
-  componentDidMount() {
-    // Connect socket
-    let socket = io("http://localhost:3000");
-    socket.on(constants.SOCKET_CONNECT, () => this.props.onSocketConnect(socket));
-    socket.on(constants.ROOM_RECEIVE, this.props.onRoomReceive);
-    socket.on(constants.MESSAGE_RECEIVE, this.props.onMessageReceive);
-  }
+  // componentDidMount() {
+  //   // Connect socket
+  //   let socket = io("http://localhost:3000");
+  //   socket.on(constants.SOCKET_CONNECT, () => this.props.onSocketConnect(socket));
+  //   socket.on(constants.ROOM_RECEIVE, this.props.onRoomReceive);
+  //   socket.on(constants.MESSAGE_RECEIVE, this.props.onMessageReceive);
+  // }
 
   onMessageSend = messageText => {
     // Send new message to the server
@@ -72,6 +72,12 @@ class App extends Component {
             Learn React
           </a>
         </header>
+        <div>
+          { !this.props.username &&	<InputForm label={ strings.USERNAME_LABEL } submitLabel={ strings.SUBMIT } onSubmit={ this.props.onUsernameSubmit } /> }
+          { this.props.username &&	<RoomListContainer /> }
+          { this.props.username &&	<MessageListContainer onMessageSend={ this.onMessageSend }/> }
+        </div>
+
       </div>
     );
   }
