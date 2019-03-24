@@ -2,6 +2,26 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+//redux
+import { connect } from "react-redux";
+
+
+//socketio
+import io from "socket.io-client";
+
+//inputform
+// import InputForm from "./components/InputForm";
+// import MessageListContainer from "./components/MessageListContainer";
+// import RoomListContainer from "./components/RoomListContainer";
+
+
+//logic
+import * as actions from "./actions";
+import * as constants from "./constants";
+import * as strings from "./strings";
+
+
+
 class App extends Component {
   render() {
     return (
