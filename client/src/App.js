@@ -16,7 +16,7 @@ import * as strings from "./strings";
 
 //visual
 import './semantic/dist/semantic.min.css';
-
+import { Grid } from "semantic-ui-react";
 
 class App extends Component {
 
@@ -49,33 +49,62 @@ class App extends Component {
     }
 
     render() {
-        return (
+        // return (
+        //
+        //
+        //     <div className="App">
+        //         <header className="App-header">
+        //             <img src={logo} className="App-logo" alt="logo"/>
+        //             <form onSubmit={this.handleSubmit}>
+        //                 <label htmlFor="name">Enter your name: </label>
+        //                 <input
+        //                     id="name"
+        //                     type="text"
+        //                     value={this.state.name}
+        //                     onChange={this.handleChange}
+        //                 />
+        //                 <button type="submit">Submit</button>
+        //             </form>
+        //             <p>{this.state.greeting}</p>
+        //
+        //             <div>
+        //                 {!this.props.username && <InputForm label={strings.USERNAME_LABEL} submitLabel={strings.SUBMIT}
+        //                                                     onSubmit={this.props.onUsernameSubmit}/>}
+        //                 {this.props.username && <RoomListContainer/>}
+        //                 {this.props.username && <MessageListContainer onMessageSend={this.onMessageSend}/>}
+        //             </div>
+        //         </header>
+        //     </div>
+        // );
 
 
-            <div className="App">
-                <header className="App-header">
-                    <img src={logo} className="App-logo" alt="logo"/>
-                    <form onSubmit={this.handleSubmit}>
-                        <label htmlFor="name">Enter your name: </label>
-                        <input
-                            id="name"
-                            type="text"
-                            value={this.state.name}
-                            onChange={this.handleChange}
-                        />
-                        <button type="submit">Submit</button>
-                    </form>
-                    <p>{this.state.greeting}</p>
+        if(this.props.username === null) {
+            return (
+                <Grid centered className="full-height">
+                    <Grid.Column mobile={14} tablet={10} computer={8} largeScreen={6} widescreen={4} verticalAlign="middle">
+                        <InputForm label={ strings.USERNAME_LABEL } submitLabel={ strings.LOGIN } onSubmit={ this.props.onUsernameSubmit } />
+                    </Grid.Column>
+                </Grid>
+            )
+        } else {
+            return (
+                <div ref="rootElement" className="flex-column full-height">
+                    <Grid centered className="flex-one">
+                        <Grid.Row>
+                            <Grid.Column mobile={16} tablet={4} computer={3} largeScreen={2} widescreen={1}>
+                                <RoomListContainer />
+                            </Grid.Column>
+                            <Grid.Column mobile={16} tablet={12} computer={10} largeScreen={7} widescreen={5} className="flex-column flex-one">
+                                <MessageListContainer onMessageSend={ this.onMessageSend }/>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
+                </div>
+            )
+        }
 
-                    <div>
-                        {!this.props.username && <InputForm label={strings.USERNAME_LABEL} submitLabel={strings.SUBMIT}
-                                                            onSubmit={this.props.onUsernameSubmit}/>}
-                        {this.props.username && <RoomListContainer/>}
-                        {this.props.username && <MessageListContainer onMessageSend={this.onMessageSend}/>}
-                    </div>
-                </header>
-            </div>
-        );
+
+
     }
 
     handleChange(event) {
