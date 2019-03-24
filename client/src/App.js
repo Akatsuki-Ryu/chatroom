@@ -25,13 +25,13 @@ import * as strings from "./strings";
 class App extends Component {
 
 
-  // componentDidMount() {
-  //   // Connect socket
-  //   let socket = io("http://localhost:3000");
-  //   socket.on(constants.SOCKET_CONNECT, () => this.props.onSocketConnect(socket));
-  //   socket.on(constants.ROOM_RECEIVE, this.props.onRoomReceive);
-  //   socket.on(constants.MESSAGE_RECEIVE, this.props.onMessageReceive);
-  // }
+  componentDidMount() {
+    // Connect socket
+    let socket = io("http://localhost:3000");
+    socket.on(constants.SOCKET_CONNECT, () => this.props.onSocketConnect(socket));
+    socket.on(constants.ROOM_RECEIVE, this.props.onRoomReceive);
+    socket.on(constants.MESSAGE_RECEIVE, this.props.onMessageReceive);
+  }
 
   onMessageSend = messageText => {
     // Send new message to the server
@@ -104,4 +104,30 @@ class App extends Component {
 
 }
 
-export default App;
+const mapStateToProps = state => {
+  return {
+    socket: state.socket,
+    username: state.username,
+    roomId: state.roomId
+  }
+}
+
+const mapDispatchToProps = dispatch => {
+  return {
+    onUsernameSubmit: username => {
+      dispatch(actions.setUsername(username));
+    },
+    onSocketConnect: socket => {
+      dispatch(actions.connectSocket(socket));
+    },
+    onRoomReceive: room => {
+      dispatch(actions.receiveRoom(room));
+    },
+    onMessageReceive: message => {
+      dispatch(actions.receiveMessage(message));
+    }
+  }
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);
