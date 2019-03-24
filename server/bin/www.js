@@ -148,7 +148,7 @@ io.on('connection', (socket) => {
 
 //logic for message new
 function pushMessage(message) {
-    console.log("pushMessage:", message);
+    console.log(getDateTime() + " Message:", message);
     // Save message and emit to clients
     message.id = "message" + idCounter++;
     message.timestamp = new Date().getTime();
@@ -177,7 +177,6 @@ function onSocketConnect(socket) {
     // Listen for new messages being sent by client
     socket.on(constants.MESSAGE_SEND, pushMessage);
 }
-
 
 
 /**
