@@ -148,7 +148,7 @@ io.on('connection', (socket) => {
 
 //logic for message new
 function pushMessage(message) {
-    console.log("pushMessage");
+    console.log("pushMessage:", message);
     // Save message and emit to clients
     message.id = "message" + idCounter++;
     message.timestamp = new Date().getTime();
@@ -177,6 +177,7 @@ function onSocketConnect(socket) {
     // Listen for new messages being sent by client
     socket.on(constants.MESSAGE_SEND, pushMessage);
 }
+
 
 
 /**
@@ -248,7 +249,7 @@ function onListening() {
 
 
     //logic for messageing new
-    console.log("onServerListening");
+    console.log("onServerListening, port:", port);
     // Create a few rooms
     rooms.push({id: "room" + idCounter++, name: "Room 1"});
     rooms.push({id: "room" + idCounter++, name: "Room 2"});
