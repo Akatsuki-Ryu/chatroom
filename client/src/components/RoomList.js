@@ -1,11 +1,12 @@
 import React from "react";
+import { List } from "semantic-ui-react";
 
-const RoomList = ({header, data, onItemClick}) => (
-    <ul>
-        {data && data.map(item => (
-            <li key={item.id} onClick={() => onItemClick(item.id)}>{item.name}</li>
-        ))}
-    </ul>
+const RoomList = ({ header, data, selectedId, onItemClick }) => (
+    <List selection>
+        { data && data.map(item => (
+            <List.Item key={ item.id } active={ item.id === selectedId } onClick={ () => onItemClick(item.id) }>{ item.name }</List.Item>
+        )) }
+    </List>
 )
 
 export default RoomList
