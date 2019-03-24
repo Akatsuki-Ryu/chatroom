@@ -31,3 +31,29 @@
         transform: rotate(360deg);
     }
 }
+
+
+/*customized styles */
+body > div {
+    height: 100%;
+}
+
+.ui.grid {
+    margin-top: 0;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.flex-one {
+    flex: 1;
+}
+
+.full-height {
+    height: 100%;
+}
