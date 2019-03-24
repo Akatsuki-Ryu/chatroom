@@ -26,8 +26,8 @@ class RoomListContainer extends Component {
             history.push(this.props.roomId);
         }
         return (
-            <RoomList header={strings.ROOMS_HEADER} data={this.props.rooms}
-                      onItemClick={roomId => this.props.onRoomSet(roomId)}/>
+            <RoomList header={ strings.ROOMS_HEADER } data={ this.props.rooms }
+                      selectedId={ this.props.roomId } onItemClick={ roomId => this.props.onRoomSet(roomId) }/>
         );
     }
 }
