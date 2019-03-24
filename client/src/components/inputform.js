@@ -1,22 +1,34 @@
 import React from "react";
 
-const InputForm = ({label, submitLabel, onSubmit}) => {
-    let input;
+//visual
+import { Button, Form } from "semantic-ui-react";
 
-    const onFormSubmit = event => {
-        event.preventDefault();
-        let inputText = input.value.trim();
-        if (!inputText) return;
-        onSubmit(inputText);
-        input.value = "";
+
+class InputForm extends React.Component {
+    state = {input: ""};
+
+    onInputChange = (event) => {
+        this.setState({ input: event.target.value });
     }
 
-    return (
-        <form onSubmit={onFormSubmit}>
-            <label>{label}<input ref={ref => input = ref}/></label>
-            <input type="submit" value={submitLabel}/>
-        </form>
-    )
+    onFormSubmit = () => {
+        let input = this.state.input.trim();
+        if(!input) return;
+        this.props.onSubmit(input);
+        this.setState({ input: "" });
+    }
+
+    render() {
+        return (
+            <Form onSubmit={ this.onFormSubmit }>
+                <Form.Group inline style={{ flexWrap:"nowrap" }}>
+                    <Form.Input width={16} label={ this.props.label } value={ this.state.input } onChange={ this.onInputChange } />
+                    <Button primary>{ this.props.submitLabel }</Button>
+                </Form.Group>
+            </Form>
+        );
+    }
+
 }
 
 export default InputForm
