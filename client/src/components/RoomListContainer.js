@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
-// import RoomList from "./RoomList";
+import RoomList from "./RoomList";
 import * as actions from "../actions";
 import * as history from "../history";
 import * as strings from "../strings";
@@ -26,7 +26,7 @@ class RoomListContainer extends Component {
             history.push(this.props.roomId);
         }
         return (
-            {/*<RoomList header={ strings.ROOMS_HEADER } data={ this.props.rooms } onItemClick={ roomId => this.props.onRoomSet(roomId) }/>*/}
+            <RoomList header={ strings.ROOMS_HEADER } data={ this.props.rooms } onItemClick={ roomId => this.props.onRoomSet(roomId) }/>
         );
     }
 }
