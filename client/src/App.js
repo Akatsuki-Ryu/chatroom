@@ -14,6 +14,9 @@ import * as actions from "./actions";
 import * as constants from "./constants";
 import * as strings from "./strings";
 
+//visual
+import './semantic/dist/semantic.min.css';
+
 
 class App extends Component {
 
