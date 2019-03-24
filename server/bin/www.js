@@ -8,6 +8,13 @@ var app = require('../app');
 var debug = require('debug')('server:server');
 var http = require('http');
 
+//chat parameters
+const constants = require("../public/constants");
+let rooms = [];
+let messages = [];
+let idCounter = 0;
+
+
 // date and time information
 function getDateTime() {
 
@@ -75,9 +82,9 @@ io.on('connection', function (socket) {
 
 var numUsers = 0;
 
+//logic for message old
 io.on('connection', (socket) => {
     var addedUser = false;
-
     // when the client emits 'new message', this listens and executes
     socket.on('new message', (data) => {
         // we tell the client to execute 'new message'
@@ -137,6 +144,40 @@ io.on('connection', (socket) => {
         }
     });
 });
+
+
+//logic for message new
+function pushMessage(message) {
+    console.log("pushMessage");
+    // Save message and emit to clients
+    message.id = "message" + idCounter++;
+    message.timestamp = new Date().getTime();
+    messages.push(message);
+    io.emit(constants.MESSAGE_RECEIVE, message);
+}
+
+//on listening , code is in another func
+function onServerListening() {
+    console.log("onServerListening");
+    // Create a few rooms
+    rooms.push({ id: "room" + idCounter++, name: "Room 1" });
+    rooms.push({ id: "room" + idCounter++, name: "Room 2" });
+    rooms.push({ id: "room" + idCounter++, name: "Room 3" });
+    // Wait for sockets to connect
+    io.on("connection", onSocketConnect);
+}
+
+//when socket conneted , messsageing new
+function onSocketConnect(socket) {
+    console.log("onSocketConnect");
+    // Emit rooms to the client
+    for (var i = 0; i < rooms.length; i++) {
+        io.emit(constants.ROOM_RECEIVE, rooms[i]);
+    }
+    // Listen for new messages being sent by client
+    socket.on(constants.MESSAGE_SEND, pushMessage);
+}
+
 
 
 /**
@@ -205,5 +246,16 @@ function onListening() {
         ? 'pipe ' + addr
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
+
+
+    //logic for messageing new
+    console.log("onServerListening");
+    // Create a few rooms
+    rooms.push({ id: "room" + idCounter++, name: "Room 1" });
+    rooms.push({ id: "room" + idCounter++, name: "Room 2" });
+    rooms.push({ id: "room" + idCounter++, name: "Room 3" });
+    // Wait for sockets to connect
+    io.on("connection", onSocketConnect);
+
 }
 
