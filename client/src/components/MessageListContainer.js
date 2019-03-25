@@ -3,18 +3,22 @@ import { connect } from "react-redux";
 import { Header } from "semantic-ui-react";
 import InputForm from "./InputForm";
 import MessageList from "./MessageList";
+import RoomListContainer from "./RoomListContainer";
 import * as strings from "../strings";
 
 class MessageListContainer extends Component {
     render() {
         return (
-            <div className="col" style={{ display:"grid", gridTemplateRows:"auto 1fr auto auto" }}>
-                <div style={{ position:"sticky", top:0 }}>
-                    <Header as="h2">{ strings.HEADER + " - " + this.props.roomName }</Header>
+            <div className={ this.props.className } style={{ display:"grid", gridTemplateRows:"auto 1fr auto auto" }}>
+                <div className="sticky">
+                    <Header as="h2">{ this.props.roomName }</Header>
                 </div>
                 <div />
                 <MessageList data={ this.props.messages } username={ this.props.username } />
-                <InputForm submitLabel={ strings.SEND } onSubmit={ this.props.onMessageSend } />
+                <div className="flex-row">
+                    <RoomListContainer />
+                    <InputForm className="flex" placeholder={ strings.TYPE_MESSAGE } submitLabel={ strings.SEND } onSubmit={ this.props.onMessageSend } />
+                </div>
             </div>
         )
     }
