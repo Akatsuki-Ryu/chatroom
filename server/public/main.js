@@ -1,3 +1,4 @@
+// this code is from https://github.com/socketio/socket.io/blob/master/examples/chat/public/main.js
 $(function () {
     var FADE_TIME = 250; // ms
     var TYPING_TIMER_LENGTH = 1000; // ms
