@@ -1,11 +1,10 @@
 body > div {
     height: 100%;
     display: flex;
-    padding: 1em;
 }
 
 .flex {
-    flex: 1;
+    flex: 1 1 0;
 }
 
 .flex-col {
@@ -23,18 +22,12 @@ body > div {
     align-items: center;
 }
 
-.sticky {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-}
-
 .login-form {
     width: 100%;
-    max-width: 480px !important;
+    max-width: 640px !important;
 }
 
 .chat-room {
     width: 100%;
-    max-width: 640px !important;
+    max-width: 800px !important;
 }

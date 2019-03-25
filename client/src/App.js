@@ -93,8 +93,9 @@ class App extends Component {
 
 
                 <div className="flex flex-col flex-center">
-                    <MessageListContainer className="flex chat-room" onMessageSend={ this.onMessageSend }/>
-                    </div>
+                    <MessageListContainer className="flex flex-col chat-room" onMessageSend={ this.onMessageSend }/>
+
+                </div>
 
             )
         }
