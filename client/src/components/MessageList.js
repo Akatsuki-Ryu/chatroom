@@ -14,7 +14,7 @@ const MessageList = ({ data, username }) => {
         <List>
             { data && data.map(message => (
                 <List.Item key={message.id}>
-                    <Segment floated={ getAlignment(username, message.username) } color={ getColor(username, message.username) } style={{ textAlign:getAlignment(username, message.username) }}>
+                    <Segment floated={ getAlignment(username, message.username) } inverted color={ getColor(username, message.username) } style={{ textAlign:getAlignment(username, message.username) }}>
                         <p>
                             <span style={{ fontWeight:"bold" }}>{ message.username }</span><br/>
                             <span style={{ fontSize:"medium" }}>{ message.text }</span><br/>

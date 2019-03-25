@@ -8,9 +8,11 @@ import * as strings from "../strings";
 class MessageListContainer extends Component {
     render() {
         return (
-            <div className="flex-one flex-column">
-                <Header as="h2">{ strings.HEADER + " - " + this.props.roomName }</Header>
-                <div className="flex-one" />
+            <div className="col" style={{ display:"grid", gridTemplateRows:"auto 1fr auto auto" }}>
+                <div style={{ position:"sticky", top:0 }}>
+                    <Header as="h2">{ strings.HEADER + " - " + this.props.roomName }</Header>
+                </div>
+                <div />
                 <MessageList data={ this.props.messages } username={ this.props.username } />
                 <InputForm submitLabel={ strings.SEND } onSubmit={ this.props.onMessageSend } />
             </div>
