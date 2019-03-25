@@ -1,9 +1,7 @@
-
 module.exports = {
-    HEADER: "Chatbox",
     LOGIN: "Login",
-    ROOMS_HEADER: "Rooms",
-    SUBMIT: "Submit",
     SEND: "Send",
+    TYPE_MESSAGE: "Type message",
     USERNAME_LABEL: "What's your nickname?   "
 }
+
