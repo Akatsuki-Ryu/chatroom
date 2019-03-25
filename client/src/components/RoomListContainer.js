@@ -3,7 +3,6 @@ import { connect } from "react-redux";
 import RoomList from "./RoomList";
 import * as actions from "../actions";
 import * as history from "../history";
-import * as strings from "../strings";
 
 class RoomListContainer extends Component {
     componentDidMount() {
