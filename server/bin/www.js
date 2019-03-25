@@ -169,7 +169,7 @@ function onServerListening() {
 
 //when socket conneted , messsageing new
 function onSocketConnect(socket) {
-    console.log("onSocketConnect");
+    console.log(getDateTime() + "  onSocketConnect");
     // Emit rooms to the client
     for (var i = 0; i < rooms.length; i++) {
         io.emit(constants.ROOM_RECEIVE, rooms[i]);
