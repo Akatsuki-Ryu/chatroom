@@ -82,7 +82,8 @@ class App extends Component {
             return (
 
 
-            <div className="col flex-grid center">
+
+                <div className="flex flex-col flex-center">
                 <InputForm className="login-form" label={ strings.USERNAME_LABEL } submitLabel={ strings.LOGIN } onSubmit={ this.props.onUsernameSubmit } />
             </div>
             )

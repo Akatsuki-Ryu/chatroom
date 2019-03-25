@@ -4,8 +4,8 @@ body > div {
     padding: 1em;
 }
 
-.flex-grid {
-    display: flex;
+.flex {
+    flex: 1;
 }
 
 .flex-col {
@@ -13,38 +13,28 @@ body > div {
     flex-direction: column;
 }
 
-.col {
-    flex: 1;
+.flex-row {
+    display: flex;
+    flex-direction: row;
 }
 
-.center {
+.flex-center {
     justify-content: center;
     align-items: center;
 }
 
+.sticky {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+
 .login-form {
     width: 100%;
-    max-width: 30em !important;
+    max-width: 480px !important;
 }
 
-/* Mobile */
-@media (max-width: 767px) {
-    /* .login-form {
-        width: 100%;
-    } */
+.chat-room {
+    width: 100%;
+    max-width: 640px !important;
 }
-
-/* Tablet / iPad Portrait */
-/* @media (min-width: 768px) and (max-width: 991px) { */
-@media (min-width: 768px) {
-    .login-form {
-        width: 50%;
-    }
-}
-
-/* Computer / Desktop / iPad Landscape */
-/* @media (min-width: 992px) {
-	.login-form {
-		width: 50%;
-	}
-} */
