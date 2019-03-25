@@ -1,12 +1,14 @@
 import React from "react";
-import { List } from "semantic-ui-react";
+import { Dropdown } from "semantic-ui-react";
 
-const RoomList = ({ header, data, selectedId, onItemClick }) => (
-    <List selection>
-        { data && data.map(item => (
-            <List.Item key={ item.id } active={ item.id === selectedId } onClick={ () => onItemClick(item.id) }>{ item.name }</List.Item>
-        )) }
-    </List>
+const RoomList = ({ data, selectedId, onItemClick }) => (
+    <Dropdown text="Select Room" button upward style={{ margin:"0 1em 0 0" }}>
+        <Dropdown.Menu>
+            { data && data.map(item => (
+                <Dropdown.Item key={ item.id } active={ item.id === selectedId } onClick={ () => onItemClick(item.id) }>{ item.name }</Dropdown.Item>
+            )) }
+        </Dropdown.Menu>
+    </Dropdown>
 )
 
 export default RoomList
