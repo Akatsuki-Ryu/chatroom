@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import * as ReactDOM from 'react-dom';
 import { connect } from "react-redux";
 import InputForm from "./InputForm";
 import MessageList from "./MessageList";
@@ -6,11 +7,24 @@ import RoomListContainer from "./RoomListContainer";
 import * as strings from "../strings";
 
 class MessageListContainer extends Component {
+    scrollToBottom = () => {
+        //seems it is not solved yet .
+        let scrollElement = this.refs.element;
+        while(scrollElement.parentElement) {
+            scrollElement = scrollElement.parentElement;
+        }
+        const maxScrollTop = scrollElement.scrollHeight - scrollElement.clientHeight;
+        ReactDOM.findDOMNode(scrollElement).scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+    }
+
+    componentDidUpdate() {
+        this.scrollToBottom();
+    }
+
     render() {
         return (
-            <div className={ this.props.className }>
+            <div ref="element" className={ this.props.className }>
                 <div className="flex"/>
-
                 <MessageList data={ this.props.messages } username={ this.props.username } />
                 <div className="flex-row" style={{ boxSizing:"content-box" }}>
                     <RoomListContainer />
