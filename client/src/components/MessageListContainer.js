@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import * as ReactDOM from 'react-dom';
 import { connect } from "react-redux";
-import InputForm from "./InputForm";
+import InputForm from "./inputform";
 import MessageList from "./MessageList";
 import RoomListContainer from "./RoomListContainer";
 import * as strings from "../strings";

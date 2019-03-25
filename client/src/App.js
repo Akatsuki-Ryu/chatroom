@@ -6,7 +6,7 @@ import {connect} from "react-redux";
 //socketio
 import io from "socket.io-client";
 //inputform
-import InputForm from "./components/InputForm";
+import InputForm from "./components/inputform";
 import MessageListContainer from "./components/MessageListContainer";
 // import RoomListContainer from "./components/RoomListContainer";
 //logic
