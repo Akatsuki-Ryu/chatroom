@@ -17,7 +17,7 @@ class InputForm extends React.Component {
 
     render() {
         return (
-            <Form className={ this.props.className } onSubmit={ this.onFormSubmit }>
+            <Form className={ this.props.className } onSubmit={ this.onFormSubmit } style={{ margin:"0 0 1em 0" }}>
                 <Form.Group inline style={{ flexWrap:"nowrap", margin:0 }}>
                     <Form.Input width={16} label={ this.props.label } placeholder={ this.props.placeholder } value={ this.state.input } onChange={ this.onInputChange } />
                     <Button primary>{ this.props.submitLabel }</Button>
