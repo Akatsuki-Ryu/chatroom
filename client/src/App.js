@@ -8,7 +8,7 @@ import io from "socket.io-client";
 //inputform
 import InputForm from "./components/InputForm";
 import MessageListContainer from "./components/MessageListContainer";
-import RoomListContainer from "./components/RoomListContainer";
+// import RoomListContainer from "./components/RoomListContainer";
 //logic
 import * as actions from "./actions";
 import * as constants from "./constants";
@@ -91,9 +91,8 @@ class App extends Component {
 
 
 
-                    <div className="col flex-col">
-                        <RoomListContainer />
-                        <MessageListContainer onMessageSend={ this.onMessageSend }/>
+                <div className="flex flex-col flex-center">
+                    <MessageListContainer className="flex chat-room" onMessageSend={ this.onMessageSend }/>
                     </div>
 
             )
