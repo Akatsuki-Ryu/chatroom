@@ -4,10 +4,15 @@
   "description": "this is a chatting room application powered by akabox",
   "main": "index.js",
   "scripts": {
-    "server": "cd server && npm start",
-    "client": "cd client && npm start",
+    "clean": "find . -name \"node_modules\" -type d -prune -exec rm -rf '{}' +",
+    "prep": "npm install",
+    "serverprep": "cd server && npm install",
+    "clientprep": "cd client && npm install && npm run build",
+    "serverrun": "cd server && npm start",
+    "clientrun": "cd client && npm start",
     "clientbuild": "cd client/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build",
-    "fullstack": "run-p server client"
+    "fullstackrun": "run-p serverrun clientrun",
+    "fullprep": "npm run clean && npm install && run-p serverprep clientprep"
   },
   "repository": {
     "type": "git",
