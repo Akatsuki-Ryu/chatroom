@@ -5,10 +5,10 @@ const MessageList = ({data, username}) => {
     const formatDate = date => {
         const pad = n => n < 10 ? "0" + n : n;
         return pad(date.getHours()) + ":" + pad(date.getMinutes());
-    }
+    };
 
-    const getAlignment = (username1, username2) => username1 === username2 ? "right" : "left"
-    const getColor = (username1, username2) => username1 === username2 ? "green" : "blue"
+    const getAlignment = (username1, username2) => username1 === username2 ? "right" : "left";
+    const getColor = (username1, username2) => username1 === username2 ? "green" : "blue";
 
     return (
         <List relaxed>
@@ -31,6 +31,6 @@ const MessageList = ({data, username}) => {
             ))}
         </List>
     )
-}
+};
 
 export default MessageList
