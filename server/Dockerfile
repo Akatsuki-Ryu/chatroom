@@ -13,7 +13,7 @@ RUN npm install
 COPY . .
 
 # Exports
-EXPOSE 3001
+EXPOSE 3111
 #RUN npm start
 CMD ["npm", "start"]
 
