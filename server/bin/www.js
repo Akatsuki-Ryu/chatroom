@@ -68,7 +68,6 @@ mongodbval.connect(process.env.DATABASE || 'mongodb://mongodbapp:27017/chatdb', 
         throw err;
     }
     console.log("database connected success================================");
-    console.log(process.env.BACKENDIP + ':' + process.env.PORT + '/messages');
     let chatdbcollection = dbdata.collection('chats');
 
 //socket.io
