@@ -17,7 +17,7 @@ services:
       context: ./client
       dockerfile: Dockerfileprod
     ports:
-      - '80:80'
+      - '81:80'
   serverapp_debug:
     container_name: servercontainer_debug
     restart: always
