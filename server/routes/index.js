@@ -36,7 +36,7 @@ router.get('/api/greeting', (req, res) => {
 router.get('/messages', (req, res) => {
 
     console.log("this is the chatcache in indexjs");
-    console.log(chatcache2);
+    console.log(wwwjs.chatcache2);
     //connect to database and grab the messages . ====================================
     mongodbobj.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
         if (err) {
@@ -67,10 +67,11 @@ router.get('/messages', (req, res) => {
         // console.log(chatcache);
     })
     // =================================================onnect to database and grab the messages .
-
+    console.log("this is the wwwjs chatcache");
+    console.log(wwwjs.chatcache);
     res.setHeader('Content-Type', 'application/json');
+    // res.send();
     res.send(chatcache);
-    // res.send(chatcache2);
     chatcache = [];
 
 

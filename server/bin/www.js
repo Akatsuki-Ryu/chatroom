@@ -57,7 +57,9 @@ let server = http.createServer(app);
 const mongodbval = require('mongodb').MongoClient; //database requirements
 const io = require('socket.io').listen(server);
 let chatcache = [];
-export sssp
+exports.chatcache2 = chatcache;
+
+
 
 
 mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
@@ -96,40 +98,6 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
 //logic for message old
     io.on('connection', (socket) => {
         var addedUser = false;
-
-
-        //todo add history messages here , request from client will execute this
-        // Get chats from mongo collection
-        chatdbcollection.find().limit(100).sort({_id: -1}).toArray(function (err, res) {
-            if (err) {
-                throw err;
-            }
-
-            // Emit the messages
-            // socket.emit('output', res);
-            // console.log("from the database ");
-            // console.log(res);
-            console.log(res.length);
-
-            chatcache = res;
-
-        });
-        //display message in chat window
-        for (i = chatcache.length - 1; i > 0; i--) {
-            // console.log(res[i].username);
-            socket.broadcast.emit('new message', {
-                // username: chatcache[i].username,
-                // message: chatcache[i].message
-                username: "name",
-                message: "message"
-            });
-        }
-
-        ///////////////////////////////////////////////////////////////////////////////////
-
-
-
-
         // when the client emits 'new message', this listens and executes
         socket.on('new message', (data) => {
             // we tell the client to execute 'new message'
@@ -141,37 +109,10 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
 
 
 
-// insert message to database
-
+//insert message test to database
             chatdbcollection.insert({username: socket.username, message: data}, function () {
-
             });
-            console.log("message sent to db===================");
 
-            //connect to database and grab the messages . ====================================
-            mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
-                if (err) {
-                    throw err;
-                }
-                console.log("database connected success==data pulling ===============================");
-                let chatdbcollection = dbdata.collection('chats');
-                chatdbcollection.find().limit(2).sort({_id: -1}).toArray(function (err, res) {
-                    if (err) {
-                        throw err;
-                    }
-
-                    // Emit the messages
-                    // socket.emit('output', res);
-                    // console.log("from the database ");
-                    // console.log(res);
-
-                    // chatcache = res;
-
-
-                    console.log("data verification ");
-                    console.log(res);
-                    chatcache = res;
-                });
 
 
 
@@ -197,35 +138,31 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
             console.log("user: " + socket.username + " joined ");
 
 
-        });
-
-
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//             //todo add history messages here , request from client will execute this
-//             // Get chats from mongo collection
-//             chatdbcollection.find().limit(10).sort({_id: -1}).toArray(function (err, res) {
-//                 if (err) {
-//                     throw err;
-//                 }
-//
-//                 // Emit the messages
-//                 // socket.emit('output', res);
-//                 // console.log("from the database ");
-//                 // console.log(res);
-//                 console.log(res.length);
-//
-//                 chatcache = res;
-//
-//             });
-//             //display message in chat window
-//             for (i = chatcache.length - 1; i > 0; i--) {
-//                 // console.log(res[i].username);
-//                 socket.broadcast.emit('new message', {
-//                     username: chatcache[i].username,
-//                     message: chatcache[i].message
-//                 });
-//             }
+            //todo add history messages here , request from client will execute this
+            // Get chats from mongo collection
+            chatdbcollection.find().limit(10).sort({_id: -1}).toArray(function (err, res) {
+                if (err) {
+                    throw err;
+                }
 
+                // Emit the messages
+                // socket.emit('output', res);
+                // console.log("from the database ");
+                // console.log(res);
+                console.log(res.length);
+
+                chatcache = res;
+
+            });
+            //display message in chat window
+            for (i = chatcache.length - 1; i > 0; i--) {
+                // console.log(res[i].username);
+                // socket.broadcast.emit('new message', {
+                //     username: chatcache[i].username,
+                //     message: chatcache[i].message
+                // });
+            }
 
             ///////////////////////////////////////////////////////////////////////////////////
 
