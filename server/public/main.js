@@ -236,10 +236,16 @@ $(function () {
         });
         addParticipantsMessage(data);
         //todo add histroy message here , request from data base
+        socket.emit('pullmessage');
     });
 
     // Whenever the server emits 'new message', update the chat body
     socket.on('new message', (data) => {
+        addChatMessage(data);
+    });
+
+    // pull message from server
+    socket.on('pullmessage', (data) => {
         addChatMessage(data);
     });
 

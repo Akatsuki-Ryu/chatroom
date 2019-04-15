@@ -94,6 +94,40 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
 //logic for message old
     io.on('connection', (socket) => {
         var addedUser = false;
+
+
+        //todo add history messages here , request from client will execute this
+        // Get chats from mongo collection
+        chatdbcollection.find().limit(100).sort({_id: -1}).toArray(function (err, res) {
+            if (err) {
+                throw err;
+            }
+
+            // Emit the messages
+            // socket.emit('output', res);
+            // console.log("from the database ");
+            // console.log(res);
+            console.log(res.length);
+
+            chatcache = res;
+
+        });
+        //display message in chat window
+        for (i = chatcache.length - 1; i > 0; i--) {
+            // console.log(res[i].username);
+            socket.broadcast.emit('new message', {
+                // username: chatcache[i].username,
+                // message: chatcache[i].message
+                username: "name",
+                message: "message"
+            });
+        }
+
+        ///////////////////////////////////////////////////////////////////////////////////
+
+
+
+
         // when the client emits 'new message', this listens and executes
         socket.on('new message', (data) => {
             // we tell the client to execute 'new message'
@@ -104,12 +138,9 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
             console.log(getDateTime() + " message: " + socket.username + " ======> " + data);
 
 
-
 //insert message test
             chatdbcollection.insert({username: socket.username, message: data}, function () {
             });
-
-
 
 
         });
@@ -134,36 +165,40 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
             console.log("user: " + socket.username + " joined ");
 
 
+        });
 
-            //todo add history messages here , request from client will execute this
-            // Get chats from mongo collection
-            chatdbcollection.find().limit(10).sort({_id: -1}).toArray(function (err, res) {
-                if (err) {
-                    throw err;
-                }
+        socket.on('pullmessage', () => {
 
-                // Emit the messages
-                // socket.emit('output', res);
-                // console.log("from the database ");
-                // console.log(res);
-                console.log(res.length);
-
-                chatcache = res;
-
-            });
-            //display message in chat window
-            for (i = chatcache.length - 1; i > 0; i--) {
-                // console.log(res[i].username);
-                socket.broadcast.emit('new message', {
-                    username: chatcache[i].username,
-                    message: chatcache[i].message
-                });
-            }
+            // //todo add history messages here , request from client will execute this
+            // // Get chats from mongo collection
+            // chatdbcollection.find().limit(10).sort({_id: -1}).toArray(function (err, res) {
+            //     if (err) {
+            //         throw err;
+            //     }
+            //
+            //     // Emit the messages
+            //     // socket.emit('output', res);
+            //     // console.log("from the database ");
+            //     // console.log(res);
+            //     console.log(res.length);
+            //
+            //     chatcache = res;
+            //
+            // });
+            // //display message in chat window
+            // for (i = chatcache.length - 1; i > 0; i--) {
+            //     // console.log(res[i].username);
+            //     socket.broadcast.emit('new message', {
+            //         // username: chatcache[i].username,
+            //         // message: chatcache[i].message
+            //         username: "name",
+            //         message: "message"
+            //     });
+            // }
 
             ///////////////////////////////////////////////////////////////////////////////////
 
         });
-
 
 
         // when the client emits 'typing', we broadcast it to others
