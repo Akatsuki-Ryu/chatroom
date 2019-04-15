@@ -59,7 +59,7 @@ app.set('port', port);
 let server = http.createServer(app);
 const mongodbval = require('mongodb').MongoClient; //database requirements
 const io = require('socket.io').listen(server);
-let chatcache = [];
+let chatcachever1 = [];
 
 
 //database connection establishing
@@ -67,7 +67,7 @@ mongodbval.connect(process.env.DATABASE || 'mongodb://mongodbapp:27017/chatdb', 
     if (err) {
         throw err;
     }
-    console.log("database connected success=================================");
+    console.log("database connected success=======version 1=========================");
     let chatdbcollection = dbdata.collection('chats');
 
 //socket.io
@@ -91,7 +91,7 @@ mongodbval.connect(process.env.DATABASE || 'mongodb://mongodbapp:27017/chatdb', 
     });
 
 
-// Chatroom
+// Chatroom backend version 1
 
 
     var numUsers = 0;
@@ -115,14 +115,14 @@ mongodbval.connect(process.env.DATABASE || 'mongodb://mongodbapp:27017/chatdb', 
             // console.log(res);
 
             //put message into order
-            chatcache = [];
+            chatcachever1 = [];
             for (i = res.length - 1; i >= 0; i--) {
-                chatcache.push(res[i]);
+                chatcachever1.push(res[i]);
 
             }
 
             //this data base will be sent to route/index.js for feeding to the client
-            exports.chatcacheexp = chatcache;
+            exports.chatcacheexp = chatcachever1;
         });
 
         ///////////////////////////////////////////////////////////////////////////////////
@@ -199,6 +199,9 @@ mongodbval.connect(process.env.DATABASE || 'mongodb://mongodbapp:27017/chatdb', 
 });
 
 /////////////
+//chatroom backend version 2
+
+
 
 //logic for message new
 function pushMessage(message) {
@@ -228,6 +231,10 @@ function onSocketConnect(socket) {
     for (var i = 0; i < rooms.length; i++) {
         io.emit(constants.ROOM_RECEIVE, rooms[i]);
     }
+
+    //pull message from database
+
+
     // Listen for new messages being sent by client
     socket.on(constants.MESSAGE_SEND, pushMessage);
 }
@@ -301,14 +308,24 @@ function onListening() {
     debug('Listening on ' + bind);
 
 
-    //logic for messageing new
+    //logic for chatboard version 2
     console.log("onServerListening, port:", port);
     // Create a few rooms
     rooms.push({id: "room" + idCounter++, name: "Room 1"});
     rooms.push({id: "room" + idCounter++, name: "Room 2"});
     rooms.push({id: "room" + idCounter++, name: "Room 3"});
-    // Wait for sockets to connect
-    io.on("connection", onSocketConnect);
+
+//database connection establishing
+    mongodbval.connect(process.env.DATABASE || 'mongodb://mongodbapp:27017/chatver2', function (err, dbdata) {
+        if (err) {
+            throw err;
+        }
+        console.log("database connected success======version 2===========================");
+        let chatdbcollection = dbdata.collection('chats');
+
+        // Wait for sockets to connect
+        io.on("connection", onSocketConnect);
+    });
 
 }
 
