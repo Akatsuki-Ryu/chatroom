@@ -57,7 +57,7 @@ let server = http.createServer(app);
 const mongodbval = require('mongodb').MongoClient; //database requirements
 const io = require('socket.io').listen(server);
 let chatcache = [];
-exports.chatcache2 = chatcache;
+
 
 
 
@@ -141,7 +141,7 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
             //todo add history messages here , request from client will execute this
             // Get chats from mongo collection
-            chatdbcollection.find().limit(10).sort({_id: -1}).toArray(function (err, res) {
+            chatdbcollection.find().limit(20).sort({_id: -1}).toArray(function (err, res) {
                 if (err) {
                     throw err;
                 }
@@ -150,10 +150,17 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
                 // socket.emit('output', res);
                 // console.log("from the database ");
                 // console.log(res);
-                console.log(res.length);
 
-                chatcache = res;
+                //put message into order
+                chatcache = [];
+                for (i = res.length - 1; i > 0; i--) {
+                    chatcache.push(res[i]);
 
+                }
+                //this data base will be sent to route/index.js for feeding to the client
+                exports.chatcacheexp = chatcache;
+                console.log("res goes to chatcache in wwwjs ");
+                console.log(chatcache);
             });
             //display message in chat window
             for (i = chatcache.length - 1; i > 0; i--) {

@@ -238,7 +238,7 @@ $(function () {
         //todo add histroy message here , request from data base
 
 
-        console.log("this is the place to load histroy ");
+        console.log("this is the place to load histroy chats");
         $.get('http://localhost:3111/messages', (data) => {
             data.forEach(addChatMessage);
             console.log("data pulled from db ");

@@ -35,14 +35,14 @@ router.get('/api/greeting', (req, res) => {
 // pull messages
 router.get('/messages', (req, res) => {
 
-    console.log("this is the chatcache in indexjs");
-    console.log(wwwjs.chatcache2);
+
+
     //connect to database and grab the messages . ====================================
     mongodbobj.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
         if (err) {
             throw err;
         }
-        console.log("database connected success==data pulling ===============================");
+        console.log("database connected success==============data pulling ===============================");
         let chatdbcollection = dbdata.collection('chats');
         chatdbcollection.find().limit(10).sort({_id: -1}).toArray(function (err, res) {
             if (err) {
@@ -68,10 +68,10 @@ router.get('/messages', (req, res) => {
     })
     // =================================================onnect to database and grab the messages .
     console.log("this is the wwwjs chatcache");
-    console.log(wwwjs.chatcache);
+    console.log(wwwjs.chatcacheexp);
     res.setHeader('Content-Type', 'application/json');
     // res.send();
-    res.send(chatcache);
+    res.send(wwwjs.chatcacheexp);
     chatcache = [];
 
 
