@@ -8,6 +8,9 @@ let app = require('../app');
 let debug = require('debug')('server:server');
 let http = require('http');
 
+//using .env file to import settings
+require('dotenv').config();
+
 //chat parameters
 const constants = require("../public/constants");
 let rooms = [];
@@ -60,11 +63,12 @@ let chatcache = [];
 
 
 //database connection establishing
-mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
+mongodbval.connect(process.env.DATABASE || 'mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
     if (err) {
         throw err;
     }
-    console.log("database connected success=================================");
+    console.log("database connected success================================");
+    console.log(process.env.BACKENDIP + ':' + process.env.PORT + '/messages');
     let chatdbcollection = dbdata.collection('chats');
 
 //socket.io
@@ -99,7 +103,7 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
 
 
         ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        //todo add history messages here , request from client will execute this
+        //history messages here , request from client will execute this
         // Get chats from mongo collection
         chatdbcollection.find().limit(100).sort({_id: -1}).toArray(function (err, res) {
             if (err) {
@@ -117,8 +121,7 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
                 chatcache.push(res[i]);
 
             }
-            console.log("this is the chatcache");
-            console.log(chatcache);
+
             //this data base will be sent to route/index.js for feeding to the client
             exports.chatcacheexp = chatcache;
         });
@@ -152,7 +155,8 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
             ++numUsers;
             addedUser = true;
             socket.emit('login', {
-                numUsers: numUsers
+                numUsers: numUsers,
+                backendserverip: process.env.BACKENDIP + ':' + process.env.PORT + '/messages'
             });
             console.log("there are " + numUsers + " users now");
             // echo globally (all clients) that a person has connected
