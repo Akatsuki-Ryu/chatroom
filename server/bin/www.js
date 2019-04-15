@@ -57,9 +57,7 @@ let server = http.createServer(app);
 const mongodbval = require('mongodb').MongoClient; //database requirements
 const io = require('socket.io').listen(server);
 let chatcache = [];
-
-
-
+export sssp
 
 
 mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
@@ -108,12 +106,39 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
             console.log(getDateTime() + " message: " + socket.username + " ======> " + data);
 
 
-
-//insert message test
+// insert message to database
             chatdbcollection.insert({username: socket.username, message: data}, function () {
+
             });
+            console.log("message sent to db===================");
+
+            //connect to database and grab the messages . ====================================
+            mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
+                if (err) {
+                    throw err;
+                }
+                console.log("database connected success==data pulling ===============================");
+                let chatdbcollection = dbdata.collection('chats');
+                chatdbcollection.find().limit(2).sort({_id: -1}).toArray(function (err, res) {
+                    if (err) {
+                        throw err;
+                    }
+
+                    // Emit the messages
+                    // socket.emit('output', res);
+                    // console.log("from the database ");
+                    // console.log(res);
+
+                    // chatcache = res;
 
 
+                    console.log("data verification ");
+                    console.log(res);
+                    chatcache = res;
+                });
+
+
+            })
 
 
         });
@@ -138,31 +163,32 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
             console.log("user: " + socket.username + " joined ");
 
 
+
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //todo add history messages here , request from client will execute this
-            // Get chats from mongo collection
-            chatdbcollection.find().limit(10).sort({_id: -1}).toArray(function (err, res) {
-                if (err) {
-                    throw err;
-                }
-
-                // Emit the messages
-                // socket.emit('output', res);
-                // console.log("from the database ");
-                // console.log(res);
-                console.log(res.length);
-
-                chatcache = res;
-
-            });
-            //display message in chat window
-            for (i = chatcache.length - 1; i > 0; i--) {
-                // console.log(res[i].username);
-                socket.broadcast.emit('new message', {
-                    username: chatcache[i].username,
-                    message: chatcache[i].message
-                });
-            }
+//             //todo add history messages here , request from client will execute this
+//             // Get chats from mongo collection
+//             chatdbcollection.find().limit(10).sort({_id: -1}).toArray(function (err, res) {
+//                 if (err) {
+//                     throw err;
+//                 }
+//
+//                 // Emit the messages
+//                 // socket.emit('output', res);
+//                 // console.log("from the database ");
+//                 // console.log(res);
+//                 console.log(res.length);
+//
+//                 chatcache = res;
+//
+//             });
+//             //display message in chat window
+//             for (i = chatcache.length - 1; i > 0; i--) {
+//                 // console.log(res[i].username);
+//                 socket.broadcast.emit('new message', {
+//                     username: chatcache[i].username,
+//                     message: chatcache[i].message
+//                 });
+//             }
 
             ///////////////////////////////////////////////////////////////////////////////////
 

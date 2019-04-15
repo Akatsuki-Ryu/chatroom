@@ -8,7 +8,8 @@ var app = require('express');
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
-const mongodbval = require('mongodb').MongoClient; //database requirements
+const mongodbobj = require('mongodb').MongoClient; //database requirements
+let wwwjs = require('../bin/www');
 let chatcache = [];
 /* GET home page. */
 // router.get('/', function(req, res, next) {
@@ -33,15 +34,17 @@ router.get('/api/greeting', (req, res) => {
 
 // pull messages
 router.get('/messages', (req, res) => {
-    // Message.find({},(err, messages)=> {
-    //   res.send(messages);
-    // })
-    mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
+
+    console.log("this is the chatcache in indexjs");
+    console.log(chatcache2);
+    //connect to database and grab the messages . ====================================
+    mongodbobj.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
         if (err) {
             throw err;
         }
-        console.log("database connected success=================================");
-        let chatdbcollection = dbdata.collection('chats');chatdbcollection.find().limit(100).sort({_id: 1}).toArray(function (err, res) {
+        console.log("database connected success==data pulling ===============================");
+        let chatdbcollection = dbdata.collection('chats');
+        chatdbcollection.find().limit(10).sort({_id: -1}).toArray(function (err, res) {
             if (err) {
                 throw err;
             }
@@ -50,16 +53,25 @@ router.get('/messages', (req, res) => {
             // socket.emit('output', res);
             // console.log("from the database ");
             // console.log(res);
-            console.log("res length");
-            console.log(res.length);
 
-            chatcache = res;
+            // chatcache = res;
+
+            //put message into order
+            for (i = res.length - 1; i > 0; i--) {
+                chatcache.push(res[i]);
+
+            }
 
         });
+        console.log("data format finished index ");
+        // console.log(chatcache);
     })
+    // =================================================onnect to database and grab the messages .
 
     res.setHeader('Content-Type', 'application/json');
     res.send(chatcache);
+    // res.send(chatcache2);
+    chatcache = [];
 
 
 })
