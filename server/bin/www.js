@@ -67,7 +67,7 @@ mongodbval.connect(process.env.DATABASE || 'mongodb://mongodbapp:27017/chatdb', 
     if (err) {
         throw err;
     }
-    console.log("database connected success================================");
+    console.log("database connected success=================================");
     let chatdbcollection = dbdata.collection('chats');
 
 //socket.io
@@ -155,7 +155,6 @@ mongodbval.connect(process.env.DATABASE || 'mongodb://mongodbapp:27017/chatdb', 
             addedUser = true;
             socket.emit('login', {
                 numUsers: numUsers,
-                backendserverip: process.env.BACKENDIP + ':' + process.env.PORT + '/messages'
             });
             console.log("there are " + numUsers + " users now");
             // echo globally (all clients) that a person has connected

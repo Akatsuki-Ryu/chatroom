@@ -232,7 +232,7 @@ $(function () {
 
 
         // pull histroy message here , request from data base
-        $.get(data.backendserverip || 'http://62.78.181.155:3111/messages', (data) => {
+        $.get('/messages', (data) => {
 
             data.forEach(addChatMessage);
             let message = "Welcome to Chatboard – Powered by Akabox";
