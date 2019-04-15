@@ -236,7 +236,23 @@ $(function () {
         });
         addParticipantsMessage(data);
         //todo add histroy message here , request from data base
-        socket.emit('pullmessage');
+
+
+        console.log("this is the place to load histroy ");
+        $.get('http://localhost:3111/messages', (data) => {
+            data.forEach(addChatMessage);
+            console.log("data pulled from db ");
+            console.log(data);
+        })
+        // for (i = 12- 1; i > 0; i--) {
+        //
+        //     addChatMessage({
+        //         username: "bot",
+        //         message: i
+        //     });
+        // }
+
+
     });
 
     // Whenever the server emits 'new message', update the chat body
