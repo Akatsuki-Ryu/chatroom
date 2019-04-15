@@ -30,17 +30,11 @@ router.get('/api/greeting', (req, res) => {
     console.log("the name is " + name);
 });
 
-// pull messages
+// pull messages all
 router.get('/messages', (req, res) => {
-
-
-
     res.setHeader('Content-Type', 'application/json');
     // res.send();
     res.send(wwwjs.chatcacheexp);
-
-
-
 })
 
 io.on('connection', function (socket) {
