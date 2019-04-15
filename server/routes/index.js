@@ -8,12 +8,15 @@ var app = require('express');
 var server = require('http').createServer(app);
 var io = require('socket.io').listen(server);
 
-
+const mongodbval = require('mongodb').MongoClient; //database requirements
+let chatcache = [];
 /* GET home page. */
 // router.get('/', function(req, res, next) {
 //   // res.render('index', { title: 'Express' });
 //   res.send("hello world");
 // });
+
+
 
 
 router.get('/', function (req, res) {
@@ -28,6 +31,38 @@ router.get('/api/greeting', (req, res) => {
     console.log("the name is " + name);
 });
 
+// pull messages
+router.get('/messages', (req, res) => {
+    // Message.find({},(err, messages)=> {
+    //   res.send(messages);
+    // })
+    mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
+        if (err) {
+            throw err;
+        }
+        console.log("database connected success=================================");
+        let chatdbcollection = dbdata.collection('chats');chatdbcollection.find().limit(100).sort({_id: 1}).toArray(function (err, res) {
+            if (err) {
+                throw err;
+            }
+
+            // Emit the messages
+            // socket.emit('output', res);
+            // console.log("from the database ");
+            // console.log(res);
+            console.log("res length");
+            console.log(res.length);
+
+            chatcache = res;
+
+        });
+    })
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(chatcache);
+
+
+})
 
 io.on('connection', function (socket) {
     console.log('a user connected from indexjs');
