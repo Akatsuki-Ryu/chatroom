@@ -4,9 +4,9 @@
  * Module dependencies.
  */
 
-var app = require('../app');
-var debug = require('debug')('server:server');
-var http = require('http');
+let app = require('../app');
+let debug = require('debug')('server:server');
+let http = require('http');
 
 //chat parameters
 const constants = require("../public/constants");
@@ -46,105 +46,155 @@ function getDateTime() {
  * Get port from environment and store in Express.
  */
 
-var port = normalizePort(process.env.PORT || '3111');
+let port = normalizePort(process.env.PORT || '3111');
 app.set('port', port);
 
 /**
  * Create HTTP server.
  */
 
-var server = http.createServer(app);
+let server = http.createServer(app);
+const mongodbval = require('mongodb').MongoClient; //database requirements
+const io = require('socket.io').listen(server);
+let chatcache = [];
 
+mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
+    if (err) {
+        throw err;
+    }
+    console.log("database connected success=================================");
+    let chatdbcollection = dbdata.collection('chats');
 
 //socket.io
 //this is a code that solves "GET /socket.io/socket.io.js 404" error
-var io = require('socket.io').listen(server);
-io.on('connection', function (socket) {
-    // console.log('a user connected');  //this is for the indexold
-    io.emit('chat message', "a user is now online, welcome");
-    socket.on('disconnect', function () {
-        // console.log('user disconnected');  //this is for the indexold
-        // io.emit('chat message', "user is gone offline");  //this is for the indexold
+
+    io.on('connection', function (socket) {
+        // console.log('a user connected');  //this is for the indexold
+        io.emit('chat message', "a user is now online, welcome");
+        socket.on('disconnect', function () {
+            // console.log('user disconnected');  //this is for the indexold
+            // io.emit('chat message', "user is gone offline");  //this is for the indexold
+        });
     });
-});
 
 //show the message sent in the client
-io.on('connection', function (socket) {
-    socket.on('new message', function (msg) {
-        // console.log('message: ' + msg);  //this is for the indexold
-        // io.emit('new message', msg); //this is for the indexold
+    io.on('connection', function (socket) {
+        socket.on('new message', function (msg) {
+            // console.log('message: ' + msg);  //this is for the indexold
+            // io.emit('new message', msg); //this is for the indexold
+        });
     });
-});
 
 
 // Chatroom
 
 
-var numUsers = 0;
+    var numUsers = 0;
 
 //logic for message old
-io.on('connection', (socket) => {
-    var addedUser = false;
-    // when the client emits 'new message', this listens and executes
-    socket.on('new message', (data) => {
-        // we tell the client to execute 'new message'
-        socket.broadcast.emit('new message', {
-            username: socket.username,
-            message: data
+    io.on('connection', (socket) => {
+        var addedUser = false;
+        // when the client emits 'new message', this listens and executes
+        socket.on('new message', (data) => {
+            // we tell the client to execute 'new message'
+            socket.broadcast.emit('new message', {
+                username: socket.username,
+                message: data
+            });
+            console.log(getDateTime() + " message: " + socket.username + " ======> " + data);
+
+
+
+//insert message test
+            chatdbcollection.insert({username: socket.username, message: data}, function () {
+            });
+
+
+
+
         });
-        console.log(getDateTime() + " message: " + socket.username + " ======> " + data);
 
-    });
+        // when the client emits 'add user', this listens and executes
+        socket.on('add user', (username) => {
+            if (addedUser) return;
 
-    // when the client emits 'add user', this listens and executes
-    socket.on('add user', (username) => {
-        if (addedUser) return;
-
-        // we store the username in the socket session for this client
-        socket.username = username;
-        ++numUsers;
-        addedUser = true;
-        socket.emit('login', {
-            numUsers: numUsers
-        });
-        console.log("there are " + numUsers + " users now");
-        // echo globally (all clients) that a person has connected
-        socket.broadcast.emit('user joined', {
-            username: socket.username,
-            numUsers: numUsers
-        });
-        console.log("user: " + socket.username + " joined ");
-    });
-
-    // when the client emits 'typing', we broadcast it to others
-    socket.on('typing', () => {
-        socket.broadcast.emit('typing', {
-            username: socket.username
-        });
-    });
-
-    // when the client emits 'stop typing', we broadcast it to others
-    socket.on('stop typing', () => {
-        socket.broadcast.emit('stop typing', {
-            username: socket.username
-        });
-    });
-
-    // when the user disconnects.. perform this
-    socket.on('disconnect', () => {
-        if (addedUser) {
-            --numUsers;
-
-            // echo globally that this client has left
-            socket.broadcast.emit('user left', {
+            // we store the username in the socket session for this client
+            socket.username = username;
+            ++numUsers;
+            addedUser = true;
+            socket.emit('login', {
+                numUsers: numUsers
+            });
+            console.log("there are " + numUsers + " users now");
+            // echo globally (all clients) that a person has connected
+            socket.broadcast.emit('user joined', {
                 username: socket.username,
                 numUsers: numUsers
             });
-            console.log("user: " + socket.username + " left ");
-        }
+            console.log("user: " + socket.username + " joined ");
+
+
+
+            //todo add history messages here , request from client will execute this
+            // Get chats from mongo collection
+            chatdbcollection.find().limit(10).sort({_id: -1}).toArray(function (err, res) {
+                if (err) {
+                    throw err;
+                }
+
+                // Emit the messages
+                // socket.emit('output', res);
+                // console.log("from the database ");
+                // console.log(res);
+                console.log(res.length);
+
+                chatcache = res;
+
+            });
+            //display message in chat window
+            for (i = chatcache.length - 1; i > 0; i--) {
+                // console.log(res[i].username);
+                socket.broadcast.emit('new message', {
+                    username: chatcache[i].username,
+                    message: chatcache[i].message
+                });
+            }
+
+            ///////////////////////////////////////////////////////////////////////////////////
+
+        });
+
+
+
+        // when the client emits 'typing', we broadcast it to others
+        socket.on('typing', () => {
+            socket.broadcast.emit('typing', {
+                username: socket.username
+            });
+        });
+
+        // when the client emits 'stop typing', we broadcast it to others
+        socket.on('stop typing', () => {
+            socket.broadcast.emit('stop typing', {
+                username: socket.username
+            });
+        });
+
+        // when the user disconnects.. perform this
+        socket.on('disconnect', () => {
+            if (addedUser) {
+                --numUsers;
+
+                // echo globally that this client has left
+                socket.broadcast.emit('user left', {
+                    username: socket.username,
+                    numUsers: numUsers
+                });
+                console.log("user: " + socket.username + " left ");
+            }
+        });
     });
 });
-
 
 //logic for message new
 function pushMessage(message) {

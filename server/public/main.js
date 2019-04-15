@@ -235,6 +235,7 @@ $(function () {
             prepend: true
         });
         addParticipantsMessage(data);
+        //todo add histroy message here , request from data base
     });
 
     // Whenever the server emits 'new message', update the chat body
