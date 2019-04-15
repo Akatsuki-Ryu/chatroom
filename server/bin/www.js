@@ -59,9 +59,7 @@ const io = require('socket.io').listen(server);
 let chatcache = [];
 
 
-
-
-
+//database connection establishing
 mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
     if (err) {
         throw err;
@@ -98,6 +96,36 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
 //logic for message old
     io.on('connection', (socket) => {
         var addedUser = false;
+
+
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //todo add history messages here , request from client will execute this
+        // Get chats from mongo collection
+        chatdbcollection.find().limit(100).sort({_id: -1}).toArray(function (err, res) {
+            if (err) {
+                throw err;
+            }
+
+            // Emit the messages
+            // socket.emit('output', res);
+            // console.log("from the database ");
+            // console.log(res);
+
+            //put message into order
+            chatcache = [];
+            for (i = res.length - 1; i >= 0; i--) {
+                chatcache.push(res[i]);
+
+            }
+            console.log("this is the chatcache");
+            console.log(chatcache);
+            //this data base will be sent to route/index.js for feeding to the client
+            exports.chatcacheexp = chatcache;
+        });
+
+        ///////////////////////////////////////////////////////////////////////////////////
+
+
         // when the client emits 'new message', this listens and executes
         socket.on('new message', (data) => {
             // we tell the client to execute 'new message'
@@ -108,12 +136,9 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
             console.log(getDateTime() + " message: " + socket.username + " ======> " + data);
 
 
-
-//insert message test to database
+            //insert message test to database
             chatdbcollection.insert({username: socket.username, message: data}, function () {
             });
-
-
 
 
         });
@@ -137,41 +162,6 @@ mongodbval.connect('mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
             });
             console.log("user: " + socket.username + " joined ");
 
-
-////////////////////////////////////////////////////////////////////////////////////////////////////////////
-            //todo add history messages here , request from client will execute this
-            // Get chats from mongo collection
-            chatdbcollection.find().limit(20).sort({_id: -1}).toArray(function (err, res) {
-                if (err) {
-                    throw err;
-                }
-
-                // Emit the messages
-                // socket.emit('output', res);
-                // console.log("from the database ");
-                // console.log(res);
-
-                //put message into order
-                chatcache = [];
-                for (i = res.length - 1; i > 0; i--) {
-                    chatcache.push(res[i]);
-
-                }
-                //this data base will be sent to route/index.js for feeding to the client
-                exports.chatcacheexp = chatcache;
-                console.log("res goes to chatcache in wwwjs ");
-                console.log(chatcache);
-            });
-            //display message in chat window
-            for (i = chatcache.length - 1; i > 0; i--) {
-                // console.log(res[i].username);
-                // socket.broadcast.emit('new message', {
-                //     username: chatcache[i].username,
-                //     message: chatcache[i].message
-                // });
-            }
-
-            ///////////////////////////////////////////////////////////////////////////////////
 
         });
 
