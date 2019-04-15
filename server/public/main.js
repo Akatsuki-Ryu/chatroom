@@ -234,7 +234,7 @@ $(function () {
 
         // pull histroy message here , request from data base
         console.log("this is the place to load histroy chats");
-        $.get('http://62.78.181.155:3111:3111/messages', (data) => {
+        $.get('http://62.78.181.155:3111/messages', (data) => {
 
             data.forEach(addChatMessage);
             let message = "Welcome to Chatboard – Powered by Akabox";
