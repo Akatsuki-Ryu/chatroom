@@ -229,28 +229,22 @@ $(function () {
     // Whenever the server emits 'login', log the login message
     socket.on('login', (data) => {
         connected = true;
-        // Display the welcome message
-        var message = "Welcome to Chat – Powered by Akabox";
-        log(message, {
-            prepend: true
-        });
-        addParticipantsMessage(data);
-        //todo add histroy message here , request from data base
 
 
+
+        // pull histroy message here , request from data base
         console.log("this is the place to load histroy chats");
         $.get('http://localhost:3111/messages', (data) => {
+
             data.forEach(addChatMessage);
-            console.log("data pulled from db ");
-            console.log(data);
+            let message = "Welcome to Chatboard – Powered by Akabox";
+            log(message);
         })
-        // for (i = 12- 1; i > 0; i--) {
-        //
-        //     addChatMessage({
-        //         username: "bot",
-        //         message: i
-        //     });
-        // }
+
+        // Display the welcome message
+
+        addParticipantsMessage(data);
+
 
     });
 
