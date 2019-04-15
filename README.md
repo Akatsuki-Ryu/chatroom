@@ -17,4 +17,9 @@ Don’t be afraid to show your strengths and interests. If you love good design 
 The application should somehow reflect your vision of software development best practises. In addition to your code being available at github or similar, we would love to see it running online. （編集済み） 
 Are you up for a challenge?
 
+# how to run
+ 
+npm run fullprep 
+
+docker-compose up
 
