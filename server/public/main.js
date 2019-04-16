@@ -232,7 +232,7 @@ $(function () {
 
 
         // pull histroy message here , request from data base
-        $.get('/messages', (data) => {
+        $.get('/msg', (data) => {
 
             data.forEach(addChatMessage);
             let message = "Welcome to Chatboard – Powered by Akabox";

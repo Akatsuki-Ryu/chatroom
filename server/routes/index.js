@@ -31,7 +31,7 @@ router.get('/api/greeting', (req, res) => {
 });
 
 // pull messages all
-router.get('/messages', (req, res) => {
+router.get('/msg', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     // res.send();
     res.send(wwwjs.chatcacheexp);
@@ -39,7 +39,7 @@ router.get('/messages', (req, res) => {
 
 
 // pull messages all version 2
-router.get('/messagesver2', (req, res) => {
+router.get('/msgver2', (req, res) => {
     res.setHeader('Content-Type', 'application/json');
     // res.send();
     res.send(wwwjs.chatcacheexp2);
