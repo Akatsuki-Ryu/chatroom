@@ -68,7 +68,7 @@ mongodbval.connect(process.env.DATABASE || 'mongodb://mongodbapp:27017/chatdb', 
     if (err) {
         throw err;
     }
-    console.log("database connected success=======version 1=========================");
+    console.log("database connected success=======version 1========================");
     let chatdbcollection = dbdata.collection('chats');
 
 //socket.io
