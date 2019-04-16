@@ -257,7 +257,7 @@ function onSocketConnect(socket) {
         }
 
         //this data base will be sent to route/index.js for feeding to the client
-        exports.chatcacheexp = chatcachever2;
+        exports.chatcacheexp2 = chatcachever2;
         console.log("message for chatcachever2");
         console.log(chatcachever2);
     });

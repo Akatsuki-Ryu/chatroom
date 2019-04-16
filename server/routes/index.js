@@ -37,6 +37,14 @@ router.get('/messages', (req, res) => {
     res.send(wwwjs.chatcacheexp);
 })
 
+
+// pull messages all version 2
+router.get('/messagesver2', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    // res.send();
+    res.send(wwwjs.chatcacheexp2);
+})
+
 io.on('connection', function (socket) {
     console.log('a user connected from indexjs');
     socket.on('disconnect', function () {
