@@ -33,13 +33,13 @@ class App extends Component {
 
     componentDidMount() {
         // Connect socket
-        // let socket = io('http://62.78.181.155:3111'); //change ip to the server backend
-        let socket = io('http://localhost:3111'); //change ip to the localhost backend
+        let socket = io('http://62.78.181.155:3111'); //change ip to the server backend
+        // let socket = io('http://localhost:3111'); //change ip to the localhost backend
         socket.on(constants.SOCKET_CONNECT, () => this.props.onSocketConnect(socket));
         //pull histroy message from the server
         //  socket.on(constants.MESSAGE_RECEIVE, this.props.onMessageReceive);
-        console.log("this is the pullmessage");
-   
+        console.log("this is the pullmessage history");
+
         //
         socket.on(constants.ROOM_RECEIVE, this.props.onRoomReceive);
         socket.on(constants.MESSAGE_RECEIVE, this.props.onMessageReceive);
