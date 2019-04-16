@@ -60,7 +60,8 @@ let server = http.createServer(app);
 const mongodbval = require('mongodb').MongoClient; //database requirements
 const io = require('socket.io').listen(server);
 let chatcachever1 = [];
-
+let chatcachever2 = [];
+let chatdbcollectionver2;
 
 //database connection establishing
 mongodbval.connect(process.env.DATABASE || 'mongodb://mongodbapp:27017/chatdb', function (err, dbdata) {
@@ -211,6 +212,11 @@ function pushMessage(message) {
     message.timestamp = new Date().getTime();
     messages.push(message);
     io.emit(constants.MESSAGE_RECEIVE, message);
+
+    //insert message test to database
+    chatdbcollectionver2.insert({username: message.username, message: message.text, roomid: message.roomId}, function () {
+    });
+
 }
 
 //on listening , code is in another func
@@ -233,7 +239,28 @@ function onSocketConnect(socket) {
     }
 
     //pull message from database
+    chatdbcollectionver2.find().limit(100).sort({_id: -1}).toArray(function (err, res) {
+        if (err) {
+            throw err;
+        }
 
+        // Emit the messages
+        // socket.emit('output', res);
+        // console.log("from the database ");
+        // console.log(res);
+
+        //put message into order
+        chatcachever2 = [];
+        for (i = res.length - 1; i >= 0; i--) {
+            chatcachever2.push(res[i]);
+
+        }
+
+        //this data base will be sent to route/index.js for feeding to the client
+        exports.chatcacheexp = chatcachever2;
+        console.log("message for chatcachever2");
+        console.log(chatcachever2);
+    });
 
     // Listen for new messages being sent by client
     socket.on(constants.MESSAGE_SEND, pushMessage);
@@ -321,10 +348,12 @@ function onListening() {
             throw err;
         }
         console.log("database connected success======version 2===========================");
-        let chatdbcollection = dbdata.collection('chats');
+        chatdbcollectionver2 = dbdata.collection('chatsver2');
 
         // Wait for sockets to connect
         io.on("connection", onSocketConnect);
+
+
     });
 
 }
