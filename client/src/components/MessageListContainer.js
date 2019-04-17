@@ -9,12 +9,20 @@ import * as strings from "../strings";
 class MessageListContainer extends Component {
     scrollToBottom = () => {
         //seems it is not solved yet .
-        let scrollElement = this.refs.element;
-        while (scrollElement.parentElement) {
-            scrollElement = scrollElement.parentElement;
-        }
-        const maxScrollTop = scrollElement.scrollHeight - scrollElement.clientHeight;
-        ReactDOM.findDOMNode(scrollElement).scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+
+        // let scrollElement = this.refs.element;
+        // while (scrollElement.parentElement) {
+        //     scrollElement = scrollElement.parentElement;
+        // }
+        // const maxScrollTop = scrollElement.scrollHeight - scrollElement.clientHeight;
+        // ReactDOM.findDOMNode(scrollElement).scrollTop = maxScrollTop > 0 ? maxScrollTop : 0;
+
+
+        //this is solving i guess
+            this.pageending.scrollIntoView({behavior: "smooth"});
+            console.log("scrooling to the buttom");
+
+
     };
 
     componentDidUpdate() {
@@ -30,6 +38,11 @@ class MessageListContainer extends Component {
                     <RoomListContainer/>
                     <InputForm className="flex" placeholder={strings.TYPE_MESSAGE} submitLabel={strings.SEND}
                                onSubmit={this.props.onMessageSend}/>
+                </div>
+                <div style={{float: "left", clear: "both"}}
+                     ref={(el) => {
+                         this.pageending = el;
+                     }}>
                 </div>
             </div>
         )
