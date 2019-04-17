@@ -20,11 +20,15 @@ let wwwjs = require('../bin/www');
 
 router.get('/', function (req, res) {
     res.sendFile(__dirname + '../public/');
+    res.header("Access-Control-Allow-Origin", "*");//this is for cors
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
 });
 
 
 router.get('/api/greeting', (req, res) => {
     const name = req.query.name || 'World';
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.setHeader('Content-Type', 'application/json');
     res.send(JSON.stringify({greeting: `Hello ${name}!`}));
     console.log("the name is " + name);
@@ -32,6 +36,8 @@ router.get('/api/greeting', (req, res) => {
 
 // pull messages all
 router.get('/msg', (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.setHeader('Content-Type', 'application/json');
     // res.send();
     res.send(wwwjs.chatcacheexp);
@@ -40,6 +46,8 @@ router.get('/msg', (req, res) => {
 
 // pull messages all version 2
 router.get('/msgver2', (req, res) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
     res.setHeader('Content-Type', 'application/json');
     // res.send();
     res.send(wwwjs.chatcacheexp2);
