@@ -9,7 +9,7 @@ const initialState = {
 }
 
 export function rootReducer(state = initialState, action) {
-    console.log('Reducer called with state ', state, ' and action ', action);
+    // console.log('Reducer called with state ', state, ' and action ', action);
     switch (action.type) {
         case constants.SOCKET_CONNECT:
             return {

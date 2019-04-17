@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
 import './App.css';
 //redux
 import {connect} from "react-redux";
@@ -13,10 +12,8 @@ import MessageListContainer from "./components/MessageListContainer";
 import * as actions from "./actions";
 import * as constants from "./constants";
 import * as strings from "./strings";
-
 //visual
 import './semantic/dist/semantic.min.css';
-import { Grid } from "semantic-ui-react";
 
 class App extends Component {
 
@@ -24,8 +21,7 @@ class App extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            name: '',
-            greeting: ''
+            messages: []
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -33,12 +29,33 @@ class App extends Component {
 
     componentDidMount() {
         // Connect socket
-        let socket = io('http://62.78.181.155:3111'); //change ip to the server backend
-        // let socket = io('http://localhost:3111'); //change ip to the localhost backend
+        // let socket = io('http://62.78.181.155:3111'); //change ip to the server backend
+        let socket = io('http://localhost:3111'); //change ip to the localhost backend
         socket.on(constants.SOCKET_CONNECT, () => this.props.onSocketConnect(socket));
         //pull histroy message from the server
         //  socket.on(constants.MESSAGE_RECEIVE, this.props.onMessageReceive);
         console.log("this is the pullmessage history");
+
+        let i;
+        let onemessage = {};
+        // fetch('http://62.78.181.155:3111/msgver2')
+        fetch('http://localhost:3111/msgver2')
+            .then(response => response.json())
+            .then(data => {
+                this.setState({messages: data});
+                console.log(data);
+                for (i = 0; i < data.length; i++) {//message formatting
+                    onemessage = {
+                        text: data[i].message,
+                        username: data[i].username,
+                        roomId: data[i].roomid,
+                        id: data[i]._id,
+                        timestamp: 1555506024699 //timestamp api is avaliable on the backend , i am hard codinghere anyway
+                    };
+                    console.log(onemessage);
+                    this.props.onMessageReceive(onemessage);
+                }
+            });
 
         //
         socket.on(constants.ROOM_RECEIVE, this.props.onRoomReceive);
@@ -84,28 +101,26 @@ class App extends Component {
         // );
 
 
-        if(this.props.username === null) {
+        if (this.props.username === null) {
             return (
 
 
-
                 <div className="flex flex-col flex-center">
-                <InputForm className="login-form" label={ strings.USERNAME_LABEL } submitLabel={ strings.LOGIN } onSubmit={ this.props.onUsernameSubmit } />
-            </div>
+                    <InputForm className="login-form" label={strings.USERNAME_LABEL} submitLabel={strings.LOGIN}
+                               onSubmit={this.props.onUsernameSubmit}/>
+                </div>
             )
         } else {
             return (
 
 
-
                 <div className="flex flex-col flex-center">
-                    <MessageListContainer className="flex flex-col chat-room" onMessageSend={ this.onMessageSend }/>
+                    <MessageListContainer className="flex flex-col chat-room" onMessageSend={this.onMessageSend}/>
 
                 </div>
 
             )
         }
-
 
 
     }
@@ -144,6 +159,7 @@ const mapDispatchToProps = dispatch => {
         },
         onMessageReceive: message => {
             dispatch(actions.receiveMessage(message));
+            console.log(message);
         }
     }
 }
