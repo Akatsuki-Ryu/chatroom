@@ -42,9 +42,8 @@ class App extends Component {
         fetch('http://localhost:3111/msgver2')
             .then(response => response.json())
             .then(data => {
-                this.setState({messages: data});
-                console.log(data);
-                for (i = 0; i < data.length; i++) {//message formatting
+                // this.setState({messages: data});
+                for (i = 0; i < data.length; i++) {      //message formatting
                     onemessage = {
                         text: data[i].message,
                         username: data[i].username,
@@ -52,14 +51,15 @@ class App extends Component {
                         id: data[i]._id,
                         timestamp: 1555506024699 //timestamp api is avaliable on the backend , i am hard codinghere anyway
                     };
-                    console.log(onemessage);
                     this.props.onMessageReceive(onemessage);
                 }
+                this.scrollToBottom();
             });
 
         //
         socket.on(constants.ROOM_RECEIVE, this.props.onRoomReceive);
         socket.on(constants.MESSAGE_RECEIVE, this.props.onMessageReceive);
+
     }
 
     onMessageSend = messageText => {
@@ -69,7 +69,12 @@ class App extends Component {
             username: this.props.username,
             roomId: this.props.roomId
         });
-    }
+    };
+
+    scrollToBottom = () => {
+        this.messagesEnd.scrollIntoView({behavior: "smooth"});
+        console.log("scrooling to the buttom");
+    };
 
     render() {
         // return (
@@ -108,6 +113,9 @@ class App extends Component {
                 <div className="flex flex-col flex-center">
                     <InputForm className="login-form" label={strings.USERNAME_LABEL} submitLabel={strings.LOGIN}
                                onSubmit={this.props.onUsernameSubmit}/>
+                    <div style={{ float:"left", clear: "both" }}
+                         ref={(el) => { this.messagesEnd = el; }}>
+                    </div>
                 </div>
             )
         } else {
@@ -116,7 +124,9 @@ class App extends Component {
 
                 <div className="flex flex-col flex-center">
                     <MessageListContainer className="flex flex-col chat-room" onMessageSend={this.onMessageSend}/>
-
+                    <div style={{ float:"left", clear: "both" }}
+                         ref={(el) => { this.messagesEnd = el; }}>
+                    </div>
                 </div>
 
             )
